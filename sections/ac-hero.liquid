@@ -1,0 +1,85 @@
+{% comment %}
+  Section: Andy Café Hero
+  Emplacement: sections/ac-hero.liquid
+{% endcomment %}
+
+<section class="ac-hero">
+  <div class="ac-hero-bg"></div>
+  <div class="ac-hero-overlay"></div>
+  <div class="ac-hero-content">
+    {% if section.settings.tag != blank %}
+      <span class="ac-hero-tag">{{ section.settings.tag }}</span>
+    {% endif %}
+    
+    <h1>
+      {{ section.settings.title_part1 }} 
+      {% if section.settings.title_accent != blank %}
+        <em>{{ section.settings.title_accent }}</em>
+      {% endif %}
+    </h1>
+    
+    {% if section.settings.description != blank %}
+      <p>{{ section.settings.description }}</p>
+    {% endif %}
+    
+    {% if section.settings.button_text != blank %}
+      <a href="{{ section.settings.button_link }}" class="ac-btn-primary">
+        {{ section.settings.button_text }}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "AC - Hero",
+  "tag": "section",
+  "class": "ac-hero-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Étiquette",
+      "default": "Torréfacteur Artisan · Québec"
+    },
+    {
+      "type": "text",
+      "id": "title_part1",
+      "label": "Titre (partie 1)",
+      "default": "Café d'"
+    },
+    {
+      "type": "text",
+      "id": "title_accent",
+      "label": "Titre (mot accent)",
+      "default": "exception"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Savourez chaque instant avec nos cafés uniques. Plongez dans un univers de découvertes aromatiques."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "Découvrir nos cafés"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AC - Hero"
+    }
+  ]
+}
+{% endschema %}

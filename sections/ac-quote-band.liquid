@@ -1,0 +1,38 @@
+{% comment %}
+  Section: Andy Café Quote Band
+  Emplacement: sections/ac-quote-band.liquid
+{% endcomment %}
+
+<div class="ac-quote-band">
+  <blockquote class="ac-reveal">
+    <p>{{ section.settings.quote }}</p>
+    <cite>— {{ section.settings.author }}</cite>
+  </blockquote>
+</div>
+
+{% schema %}
+{
+  "name": "AC - Citation",
+  "tag": "section",
+  "class": "ac-quote-section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Citation",
+      "default": "Derrière chaque tasse, il y a quelqu'un qui s'en soucie vraiment — transformez votre routine matinale en un rituel exquis."
+    },
+    {
+      "type": "text",
+      "id": "author",
+      "label": "Auteur",
+      "default": "Andy Café, Notre Engagement"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AC - Citation"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,738 @@
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  .lf-root {
+    --blush-pale:    #fdf0f0;
+    --blush-doux:    #f9dada;
+    --rose-lait:     #f4c5c5;
+    --rose-vif:      #e8969a;
+    --rose-profond:  #c95f6b;
+    --pivoine:       #b04059;
+    --prune-doux:    #8a3050;
+    --blanc-nacre:   #fffbfb;
+    --feuille:       #8fa882;
+    --feuille-pale:  #c8dbc0;
+  }
+  .lf-root { font-family: 'Raleway', sans-serif; font-weight: 300; color: var(--prune-doux); overflow-x: hidden; }
+  .lf-petale-field { position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:9999; }
+  .lf-petale { position:absolute; opacity:0; animation: lfTombePetale linear infinite; }
+  @keyframes lfTombePetale {
+    0%   { opacity:0; transform: translateY(-80px) rotate(0deg) scale(0.7); }
+    8%   { opacity:.5; }
+    88%  { opacity:.3; }
+    100% { opacity:0; transform: translateY(110vh) rotate(480deg) scale(1.1); }
+  }
+  .lf-hero {
+    min-height:100vh; position:relative;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    overflow:hidden;
+    background: radial-gradient(ellipse 75% 65% at 15% 10%, #fce6ea 0%, transparent 55%),
+                radial-gradient(ellipse 55% 70% at 88% 85%, #f7cdd5 0%, transparent 50%),
+                radial-gradient(ellipse 100% 100% at 50% 50%, #fdf0f0 0%, #fce2e8 100%);
+  }
+  .lf-arche { position:absolute; width:min(860px,100%); pointer-events:none; left:50%; transform:translateX(-50%); }
+  .lf-arche-top { top:-8px; }
+  .lf-arche-bot { bottom:-8px; transform:translateX(-50%) scaleY(-1); }
+  .lf-hero-inner { text-align:center; position:relative; z-index:3; padding:80px 30px 60px; max-width:680px; background:rgba(253,240,240,0.55); backdrop-filter:blur(6px); border-radius:32px; }
+  .lf-badge {
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:1rem; letter-spacing:.22em; text-transform:uppercase; color:var(--rose-profond);
+    border:1px solid var(--rose-lait); padding:8px 22px; border-radius:40px;
+    background:rgba(255,255,255,.55); backdrop-filter:blur(6px); margin-bottom:36px;
+    animation: lfFadeUp 1s ease .1s both;
+  }
+  .lf-badge::before, .lf-badge::after { content:'✿'; color:var(--rose-vif); }
+  .lf-hero-title {
+    font-family:'Playfair Display', serif; font-weight:400;
+    font-size:clamp(3rem, 8.5vw, 6.5rem); line-height:1.08; color:var(--prune-doux);
+    margin-bottom:16px; animation: lfFadeUp 1s ease .25s both;
+  }
+  .lf-hero-title em { font-style:italic; color:var(--rose-vif); display:block; }
+  .lf-tiret {
+    width:68px; height:2px;
+    background:linear-gradient(90deg, var(--rose-lait), var(--rose-profond), var(--rose-lait));
+    margin:0 auto 24px; border-radius:2px; animation: lfFadeUp 1s ease .38s both;
+  }
+  .lf-hero-sub {
+    font-family:'Playfair Display', serif; font-style:italic;
+    font-size:clamp(.95rem, 2.2vw, 1.35rem); color:var(--rose-profond);
+    margin-bottom:28px; animation: lfFadeUp 1s ease .45s both;
+  }
+  .lf-hero-desc {
+    font-size:.87rem; line-height:2; color:var(--pivoine); opacity:.8;
+    max-width:490px; margin:0 auto 48px; animation: lfFadeUp 1s ease .55s both;
+  }
+  .lf-cta-group { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; animation: lfFadeUp 1s ease .7s both; }
+  .lf-btn-rose {
+    background:linear-gradient(135deg, var(--rose-profond), var(--pivoine));
+    color:#fffbfb; border:none; padding:15px 42px; font-family:'Raleway', sans-serif;
+    font-size:.73rem; letter-spacing:.18em; text-transform:uppercase;
+    border-radius:40px; text-decoration:none; display:inline-block; cursor:pointer;
+    transition:all .35s ease; box-shadow:0 8px 28px rgba(176,64,89,.28);
+  }
+  .lf-btn-rose:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(176,64,89,.38); color:#fffbfb; }
+  .lf-btn-ghost {
+    background:transparent; color:var(--pivoine); border:1.5px solid var(--rose-lait);
+    padding:14px 36px; font-family:'Raleway', sans-serif;
+    font-size:.73rem; letter-spacing:.18em; text-transform:uppercase;
+    border-radius:40px; text-decoration:none; display:inline-block; cursor:pointer;
+    transition:all .35s ease;
+  }
+  .lf-btn-ghost:hover { background:var(--blush-doux); border-color:var(--rose-vif); transform:translateY(-2px); color:var(--pivoine); }
+  @keyframes lfFadeUp {
+    from { opacity:0; transform:translateY(35px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .lf-scroll-hint {
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:7px;
+    font-size:.59rem; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--rose-vif); opacity:.55; animation: lfFadeUp 1s ease 1.2s both;
+  }
+  .lf-scroll-dot { width:6px; height:6px; border-radius:50%; background:var(--rose-vif); animation: lfBob 2s ease-in-out infinite; }
+  @keyframes lfBob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(7px);} }
+  .lf-section { padding:90px 40px; background:var(--blush-pale); }
+  .lf-section-inner { max-width:1060px; margin:0 auto; }
+  .lf-eyebrow { display:block; font-size:.66rem; letter-spacing:.24em; text-transform:uppercase; color:var(--rose-vif); margin-bottom:16px; }
+  .lf-section-title { font-family:'Playfair Display', serif; font-weight:400; font-size:clamp(1.9rem, 4vw, 3rem); line-height:1.22; color:var(--prune-doux); margin-bottom:26px; }
+  .lf-section-title em { font-style:italic; color:var(--rose-profond); }
+  .lf-body-text { font-size:.87rem; line-height:2; color:var(--pivoine); opacity:.85; margin-bottom:18px; }
+  .lf-two-col { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+  .lf-visual-stack { position:relative; height:520px; }
+  .lf-vis-card { position:absolute; border-radius:18px; box-shadow:0 20px 55px rgba(176,64,89,.12); display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .lf-vis-card.v1 { width:80%; height:360px; top:0; left:50%; transform:translateX(-50%); }
+  .lf-vis-card.v2 { width:62%; height:185px; bottom:0; left:50%; transform:translateX(-50%); background:linear-gradient(145deg, #f9dada 0%, #f4b0b0 100%); }
+  .lf-vis-txt { text-align:center; padding:20px; }
+  .lf-vis-big { font-family:'Playfair Display', serif; font-size:2.8rem; font-style:italic; color:var(--prune-doux); display:block; line-height:1; margin-bottom:8px; }
+  .lf-vis-sm { font-size:.63rem; letter-spacing:.2em; text-transform:uppercase; color:var(--rose-profond); }
+  .lf-vis-card.v2 .lf-vis-big { color:var(--prune-doux); font-size:1.7rem; text-shadow: 0 0 16px rgba(255,255,255,0.8); }
+  .lf-vis-card.v2 .lf-vis-sm { color:var(--prune-doux); opacity:1; letter-spacing:.18em; }
+  .lf-chips { display:flex; gap:12px; flex-wrap:wrap; margin-top:34px; }
+  .lf-chip { border:1.5px solid var(--rose-lait); padding:9px 22px; border-radius:40px; font-family:'Playfair Display', serif; font-style:italic; font-size:.93rem; color:var(--prune-doux); background:rgba(255,255,255,.5); transition:all .3s; text-decoration:none; display:inline-block; }
+  .lf-chip:hover { background:var(--blush-doux); border-color:var(--rose-vif); color:var(--prune-doux); }
+  .lf-cafe-section { position:relative; overflow:hidden; padding:100px 40px; background:linear-gradient(160deg, #fce6ea 0%, #f9dde5 45%, #f4d2da 100%); }
+  .lf-cafe-inner { max-width:860px; margin:0 auto; position:relative; z-index:1; }
+  .lf-cafe-top { display:flex; align-items:center; justify-content:center; gap:50px; flex-wrap:wrap; margin-bottom:40px; }
+  .lf-cafe-text { flex:1; min-width:260px; max-width:480px; }
+  .lf-cafe-photo { flex-shrink:0; text-align:center; }
+  .lf-cafe-photo img { width:210px; height:260px; object-fit:cover; border-radius:18px; box-shadow:0 16px 48px rgba(176,64,89,.18); display:block; }
+  .lf-cafe-photo p { font-family:'Playfair Display',serif; font-style:italic; font-size:.78rem; color:var(--rose-profond); margin-top:10px; opacity:.8; }
+  .lf-origin-card { display:flex; flex-direction:column; align-items:center; gap:8px; border:1.5px solid rgba(201,95,107,.28); padding:34px 58px; background:rgba(255,255,255,.45); backdrop-filter:blur(8px); border-radius:18px; box-shadow:0 10px 40px rgba(176,64,89,.07); text-align:center; }
+  .lf-origin-pays { font-family:'Playfair Display', serif; font-size:1.9rem; font-style:italic; color:var(--prune-doux); }
+  .lf-origin-estate { font-size:.67rem; letter-spacing:.2em; text-transform:uppercase; color:var(--rose-profond); opacity:.7; }
+  .lf-origin-varietal { font-size:.78rem; color:var(--pivoine); letter-spacing:.1em; margin-top:4px; }
+  .lf-notes { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:28px; }
+  .lf-note { padding:10px 22px; border-radius:40px; background:rgba(255,255,255,.55); border:1.5px solid rgba(201,95,107,.2); font-size:.77rem; letter-spacing:.09em; color:var(--prune-doux); }
+  .lf-levee-section { padding:100px 40px; text-align:center; background:var(--blush-pale); }
+  .lf-levee-inner { max-width:900px; margin:0 auto; }
+  .lf-fdiv { display:flex; align-items:center; justify-content:center; gap:16px; padding:10px 0; }
+  .lf-fdiv-l { flex:1; max-width:100px; height:1px; background:linear-gradient(90deg,transparent,var(--rose-lait)); }
+  .lf-fdiv-l.r { background:linear-gradient(90deg,var(--rose-lait),transparent); }
+  .lf-fdiv-ico { font-size:1.1rem; color:var(--rose-vif); }
+  .lf-compteur-wrap { max-width:520px; margin:52px auto 64px; }
+  .lf-compteur-card {
+    background:linear-gradient(145deg, #fff5f6, #fce8ea);
+    border:1.5px solid var(--rose-lait); border-radius:28px;
+    padding:48px 40px 38px; text-align:center;
+    box-shadow:0 18px 55px rgba(176,64,89,.10);
+    position:relative; overflow:hidden;
+  }
+  .lf-compteur-card::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(244,197,197,.35) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .lf-compteur-ico { font-size:2.2rem; margin-bottom:10px; animation: lfBob 3s ease-in-out infinite; display:block; }
+  .lf-compteur-num {
+    font-family:'Playfair Display', serif; font-style:italic;
+    font-size:clamp(5rem,16vw,8rem); color:var(--rose-profond);
+    line-height:1; margin-bottom:4px; position:relative; z-index:1;
+    text-shadow: 0 4px 30px rgba(201,95,107,.18);
+  }
+  .lf-compteur-label { font-size:.7rem; letter-spacing:.30em; text-transform:uppercase; color:var(--pivoine); opacity:.7; margin-bottom:18px; }
+  .lf-compteur-sub {
+    font-family:'Playfair Display', serif; font-style:italic;
+    font-size:.95rem; color:var(--prune-doux); opacity:.72;
+    margin-bottom:26px; line-height:1.75;
+  }
+  .lf-compteur-bar-wrap { height:7px; background:rgba(244,197,197,.38); border-radius:6px; overflow:hidden; margin-bottom:12px; }
+  .lf-compteur-bar {
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--rose-lait), var(--rose-profond), var(--pivoine));
+    border-radius:6px;
+    transition:width 2.6s cubic-bezier(.4,0,.2,1);
+    box-shadow:0 2px 12px rgba(201,95,107,.4);
+  }
+  .lf-compteur-meta { display:flex; justify-content:space-between; font-size:.63rem; letter-spacing:.14em; text-transform:uppercase; color:var(--rose-vif); opacity:.65; margin-bottom:22px; }
+  .lf-compteur-encouragement {
+    display:inline-block;
+    padding:12px 26px;
+    background:rgba(255,255,255,.6); backdrop-filter:blur(6px);
+    border-radius:40px; border:1px solid var(--rose-lait);
+    font-family:'Playfair Display',serif; font-style:italic;
+    font-size:.92rem; color:var(--rose-profond);
+  }
+  .lf-forfaits { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-top:58px; }
+  .lf-forfait { border:1.5px solid var(--blush-doux); padding:46px 26px 36px; background:var(--blanc-nacre); border-radius:22px; position:relative; overflow:hidden; cursor:pointer; transition:all .4s ease; text-align:center; }
+  .lf-forfait:hover { border-color:var(--rose-vif); transform:translateY(-8px); box-shadow:0 22px 55px rgba(201,95,107,.13); }
+  .lf-forfait.star { border-color:var(--rose-vif); background:linear-gradient(155deg, #fff5f6, #fce8ea); }
+  .lf-forfait.star::after { content:'✿ Populaire'; position:absolute; top:14px; right:14px; font-size:.59rem; letter-spacing:.14em; text-transform:uppercase; color:var(--rose-profond); border:1px solid var(--rose-lait); padding:4px 12px; border-radius:20px; background:rgba(255,255,255,.75); }
+  .lf-fi { position:relative; z-index:1; }
+  .lf-forf-ico { width:64px; height:64px; margin:0 auto 20px; border-radius:50%; background:linear-gradient(135deg, var(--blush-doux), var(--rose-lait)); display:flex; align-items:center; justify-content:center; font-size:1.6rem; }
+  .lf-forfait.star .lf-forf-ico { background:linear-gradient(135deg, var(--rose-lait), var(--rose-vif)); }
+  .lf-f-nom { font-family:'Playfair Display', serif; font-size:1.32rem; font-style:italic; color:var(--prune-doux); margin-bottom:5px; }
+  .lf-f-prix { font-family:'Playfair Display', serif; font-size:2.4rem; font-style:italic; color:var(--rose-profond); margin:12px 0 5px; line-height:1; }
+  .lf-f-poids { font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; color:var(--rose-vif); opacity:.7; margin-bottom:18px; }
+  .lf-f-sep { width:38px; height:1px; background:linear-gradient(90deg,transparent,var(--rose-lait),transparent); margin:0 auto 17px; }
+  .lf-f-desc { font-size:.79rem; line-height:1.85; color:var(--pivoine); opacity:.8; margin-bottom:28px; }
+  .lf-f-btn { display:block; width:100%; background:linear-gradient(135deg, var(--rose-profond), var(--pivoine)); color:#fffbfb; border:none; padding:13px 24px; font-family:'Raleway', sans-serif; font-size:.71rem; letter-spacing:.16em; text-transform:uppercase; border-radius:40px; cursor:pointer; text-decoration:none; transition:all .3s; box-shadow:0 6px 22px rgba(176,64,89,.22); }
+  .lf-f-btn:hover { opacity:.88; transform:translateY(-1px); color:#fffbfb; }
+  .lf-impact-section { background:linear-gradient(160deg, #fad2d8 0%, #fce8ea 50%, #f9e0e6 100%); padding:90px 40px; position:relative; overflow:hidden; }
+  .lf-impact-inner { max-width:860px; margin:0 auto; text-align:center; }
+  .lf-impact-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:44px; margin-top:56px; }
+  .lf-impact-num { font-family:'Playfair Display', serif; font-size:3.8rem; font-style:italic; color:var(--rose-profond); line-height:1; }
+  .lf-impact-label { font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; color:var(--prune-doux); margin-top:12px; line-height:1.7; opacity:.72; }
+  .lf-remerciements { padding:90px 40px; text-align:center; background:linear-gradient(160deg,#fce6ea 0%,#fdf0f0 60%,#f9e0e6 100%); }
+  .lf-rem-inner { max-width:860px; margin:0 auto; }
+  .lf-prenoms-grid { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-bottom:48px; min-height:60px; }
+  .lf-prenom-tag { font-family:'Playfair Display',serif; font-style:italic; font-size:1rem; color:var(--prune-doux); background:rgba(255,255,255,.7); backdrop-filter:blur(6px); border:1.5px solid var(--rose-lait); border-radius:40px; padding:10px 24px; animation: lfFadeUp .6s ease both; }
+  .lf-rem-form { max-width:440px; margin:0 auto; }
+  .lf-rem-intro { font-family:'Playfair Display',serif; font-style:italic; font-size:.92rem; color:var(--rose-profond); margin-bottom:18px; opacity:.8; }
+  .lf-rem-input-wrap { display:flex; gap:10px; }
+  .lf-rem-input { flex:1; padding:14px 20px; border:1.5px solid var(--rose-lait); border-radius:40px; font-family:'Playfair Display',serif; font-style:italic; font-size:1rem; color:var(--prune-doux); background:rgba(255,255,255,.85); outline:none; transition:border .3s; }
+  .lf-rem-input:focus { border-color:var(--rose-vif); }
+  .lf-rem-btn { padding:14px 24px; background:linear-gradient(135deg,var(--rose-profond),var(--pivoine)); color:white; border:none; border-radius:40px; font-family:'Raleway',sans-serif; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; cursor:pointer; white-space:nowrap; box-shadow:0 6px 20px rgba(176,64,89,.25); }
+  .lf-rem-msg { font-family:'Playfair Display',serif; font-style:italic; font-size:.88rem; color:var(--rose-profond); margin-top:14px; min-height:24px; }
+
+  /* ── Popup La Bouquet ── */
+  .lf-popup-overlay { position:fixed; inset:0; background:rgba(138,48,80,.35); backdrop-filter:blur(4px); z-index:99999; display:none; align-items:center; justify-content:center; }
+  .lf-popup-overlay.active { display:flex; }
+  .lf-popup-box { background:white; border-radius:28px; padding:48px 40px; max-width:420px; width:90%; text-align:center; box-shadow:0 30px 80px rgba(176,64,89,.25); border:1.5px solid var(--rose-lait); animation: lfFadeUp .4s ease both; }
+  .lf-popup-titre { font-family:'Playfair Display',serif; font-style:italic; font-size:1.5rem; color:var(--prune-doux); margin-bottom:8px; }
+  .lf-popup-sous { font-size:.8rem; color:var(--pivoine); opacity:.7; margin-bottom:28px; line-height:1.7; }
+  .lf-popup-input { width:100%; padding:14px 20px; border:1.5px solid var(--rose-lait); border-radius:40px; font-family:'Playfair Display',serif; font-style:italic; font-size:1rem; color:var(--prune-doux); background:#fff; outline:none; margin-bottom:16px; text-align:center; }
+  .lf-popup-input:focus { border-color:var(--rose-vif); }
+  .lf-popup-btns { display:flex; flex-direction:column; gap:10px; }
+  .lf-popup-btn-oui { background:linear-gradient(135deg,var(--rose-profond),var(--pivoine)); color:white; border:none; border-radius:40px; padding:14px 24px; font-family:'Raleway',sans-serif; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; cursor:pointer; box-shadow:0 6px 20px rgba(176,64,89,.25); }
+  .lf-popup-btn-non { background:transparent; color:var(--rose-profond); border:1.5px solid var(--rose-lait); border-radius:40px; padding:12px 24px; font-family:'Raleway',sans-serif; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; cursor:pointer; }
+
+  .lf-footer { background:linear-gradient(160deg, var(--pivoine) 0%, var(--prune-doux) 100%); padding:68px 40px 48px; text-align:center; position:relative; overflow:hidden; }
+  .lf-ft { position:relative; z-index:1; }
+  .lf-ft-brand { font-family:'Playfair Display', serif; font-size:1.9rem; font-style:italic; color:#fce8ea; margin-bottom:8px; letter-spacing:.06em; }
+  .lf-ft-partners { font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(252,232,234,.38); margin-bottom:28px; }
+  .lf-ft-line { width:50px; height:1px; background:rgba(252,232,234,.28); margin:0 auto 24px; }
+  .lf-ft-copy { font-size:.7rem; color:rgba(252,232,234,.26); letter-spacing:.06em; }
+  .lf-reveal { opacity:0; transform:translateY(28px); transition:opacity .9s ease, transform .9s ease; }
+  .lf-reveal.visible { opacity:1; transform:translateY(0); }
+  .lf-org-title { font-family:'Playfair Display', serif; font-style:italic; font-size:1.05rem; color:var(--rose-profond); margin-bottom:10px; }
+  .lf-divider { border-top:1px solid var(--rose-lait); margin:24px 0; }
+
+  @media(max-width:800px){
+    .lf-two-col { grid-template-columns:1fr; gap:20px; }
+    .lf-visual-stack { height:420px; }
+    .lf-vis-card.v1 { width:86%; height:240px; top:0; left:50%; transform:translateX(-50%); }
+    .lf-vis-card.v2 { width:74%; height:160px; bottom:0; left:50%; transform:translateX(-50%); }
+    .lf-vis-card.v2 .lf-vis-big { font-size:1.3rem; }
+    .lf-vis-card.v2 .lf-vis-sm { font-size:.56rem; }
+    .lf-forfaits { grid-template-columns:1fr; }
+    .lf-impact-grid { grid-template-columns:1fr; gap:28px; }
+    .lf-origin-card { padding:28px 20px; }
+    .lf-cafe-top { flex-direction:column-reverse; align-items:center; }
+    .lf-cafe-text { text-align:center; }
+    .lf-cafe-photo img { width:180px; height:220px; }
+    .lf-section { padding:60px 20px; }
+    .lf-levee-section { padding:60px 20px; }
+    .lf-cafe-section { padding:60px 20px; }
+    .lf-compteur-card { padding:36px 22px 30px; }
+    .lf-compteur-num { font-size:clamp(4rem,20vw,6rem); }
+    .lf-remerciements { padding:60px 20px; }
+    .lf-rem-input-wrap { flex-direction:column; }
+    .lf-popup-box { padding:36px 24px; }
+  }
+</style>
+
+<div class="lf-root">
+
+<div class="lf-petale-field" id="lfPetaleField"></div>
+
+<section class="lf-hero">
+  <svg class="lf-arche lf-arche-top" viewBox="0 0 860 175" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g opacity=".2">
+      <ellipse cx="58" cy="38" rx="11" ry="30" fill="#f9dada"/>
+      <ellipse cx="58" cy="38" rx="11" ry="30" fill="#f9dada" transform="rotate(45 58 70)"/>
+      <ellipse cx="58" cy="38" rx="11" ry="30" fill="#f4c5c5" transform="rotate(90 58 70)"/>
+      <ellipse cx="58" cy="38" rx="11" ry="30" fill="#f4c5c5" transform="rotate(135 58 70)"/>
+      <ellipse cx="58" cy="38" rx="8" ry="22" fill="#fce8ea" transform="rotate(22.5 58 70)"/>
+      <ellipse cx="58" cy="38" rx="8" ry="22" fill="#fce8ea" transform="rotate(67.5 58 70)"/>
+      <ellipse cx="58" cy="38" rx="8" ry="22" fill="#fce8ea" transform="rotate(112.5 58 70)"/>
+      <ellipse cx="58" cy="38" rx="8" ry="22" fill="#fce8ea" transform="rotate(157.5 58 70)"/>
+      <circle cx="58" cy="70" r="10" fill="#e8969a"/>
+      <ellipse cx="30" cy="108" rx="7" ry="22" fill="#8fa882" transform="rotate(-28 30 108)"/>
+      <ellipse cx="86" cy="112" rx="7" ry="22" fill="#8fa882" transform="rotate(22 86 112)"/>
+    </g>
+    <g opacity=".18" transform="translate(762,0)">
+      <ellipse cx="58" cy="38" rx="11" ry="30" fill="#f9dada"/>
+      <ellipse cx="58" cy="38" rx="11" ry="30" fill="#f9dada" transform="rotate(45 58 70)"/>
+      <ellipse cx="58" cy="38" rx="11" ry="30" fill="#f4c5c5" transform="rotate(90 58 70)"/>
+      <ellipse cx="58" cy="38" rx="11" ry="30" fill="#f4c5c5" transform="rotate(135 58 70)"/>
+      <ellipse cx="58" cy="38" rx="8" ry="22" fill="#fce8ea" transform="rotate(22.5 58 70)"/>
+      <ellipse cx="58" cy="38" rx="8" ry="22" fill="#fce8ea" transform="rotate(67.5 58 70)"/>
+      <circle cx="58" cy="70" r="10" fill="#c95f6b"/>
+      <ellipse cx="30" cy="108" rx="7" ry="22" fill="#8fa882" transform="rotate(-28 30 108)"/>
+    </g>
+    <g opacity=".14" transform="translate(388,-12)">
+      <ellipse cx="42" cy="22" rx="8" ry="22" fill="#f4c5c5" transform="rotate(0 42 44)"/>
+      <ellipse cx="42" cy="22" rx="8" ry="22" fill="#f4c5c5" transform="rotate(60 42 44)"/>
+      <ellipse cx="42" cy="22" rx="8" ry="22" fill="#f4c5c5" transform="rotate(120 42 44)"/>
+      <ellipse cx="42" cy="22" rx="6" ry="17" fill="#fce8ea" transform="rotate(30 42 44)"/>
+      <ellipse cx="42" cy="22" rx="6" ry="17" fill="#fce8ea" transform="rotate(90 42 44)"/>
+      <ellipse cx="42" cy="22" rx="6" ry="17" fill="#fce8ea" transform="rotate(150 42 44)"/>
+      <circle cx="42" cy="44" r="8" fill="#e8969a"/>
+    </g>
+    <path d="M58 120 Q210 88 430 78 Q640 68 802 118" stroke="#c8dbc0" stroke-width="1.4" fill="none" opacity=".32"/>
+    <ellipse cx="210" cy="83" rx="5" ry="17" fill="#8fa882" opacity=".22" transform="rotate(-14 210 83)"/>
+    <ellipse cx="480" cy="76" rx="5" ry="17" fill="#8fa882" opacity=".18" transform="rotate(9 480 76)"/>
+    <ellipse cx="660" cy="84" rx="5" ry="17" fill="#8fa882" opacity=".2" transform="rotate(-7 660 84)"/>
+  </svg>
+  <svg class="lf-arche lf-arche-bot" viewBox="0 0 860 155" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g opacity=".16" transform="translate(100,8)">
+      <ellipse cx="55" cy="34" rx="9" ry="26" fill="#f9dada" transform="rotate(0 55 58)"/>
+      <ellipse cx="55" cy="34" rx="9" ry="26" fill="#f4c5c5" transform="rotate(60 55 58)"/>
+      <ellipse cx="55" cy="34" rx="9" ry="26" fill="#f4c5c5" transform="rotate(120 55 58)"/>
+      <ellipse cx="55" cy="34" rx="7" ry="20" fill="#fce8ea" transform="rotate(30 55 58)"/>
+      <ellipse cx="55" cy="34" rx="7" ry="20" fill="#fce8ea" transform="rotate(90 55 58)"/>
+      <ellipse cx="55" cy="34" rx="7" ry="20" fill="#fce8ea" transform="rotate(150 55 58)"/>
+      <circle cx="55" cy="58" r="9" fill="#e8969a"/>
+      <ellipse cx="30" cy="92" rx="6" ry="18" fill="#8fa882" transform="rotate(-24 30 92)"/>
+      <ellipse cx="80" cy="96" rx="6" ry="18" fill="#8fa882" transform="rotate(20 80 96)"/>
+    </g>
+    <g opacity=".14" transform="translate(668,8)">
+      <ellipse cx="55" cy="30" rx="10" ry="27" fill="#f7c5cf" transform="rotate(0 55 58)"/>
+      <ellipse cx="55" cy="30" rx="10" ry="27" fill="#f7c5cf" transform="rotate(45 55 58)"/>
+      <ellipse cx="55" cy="30" rx="10" ry="27" fill="#f4c5c5" transform="rotate(90 55 58)"/>
+      <ellipse cx="55" cy="30" rx="10" ry="27" fill="#f4c5c5" transform="rotate(135 55 58)"/>
+      <circle cx="55" cy="58" r="10" fill="#c95f6b"/>
+      <ellipse cx="30" cy="96" rx="6" ry="18" fill="#8fa882" transform="rotate(-22 30 96)"/>
+    </g>
+    <path d="M78 100 Q290 80 430 88 Q580 96 782 90" stroke="#c8dbc0" stroke-width="1.4" fill="none" opacity=".28"/>
+  </svg>
+  <div class="lf-hero-inner">
+    <div class="lf-badge">La Séjournelle &amp; Espace Flavie × Andy Café</div>
+    <h1 class="lf-hero-title">Un café<br><em>par les femmes,</em><br>pour les femmes</h1>
+    <div class="lf-tiret"></div>
+    <p class="lf-hero-sub">Une torréfaction d'exception au service d'une cause qui compte</p>
+    <p class="lf-hero-desc">Certaines causes méritent plus qu'un don, elles méritent un geste quotidien. Ce café, je l'ai torréfié avec tout ce que j'ai : mon savoir-faire, mon temps, et mon cœur. Pour les femmes de la Mauricie. Pour les familles qui se reconstruisent. Pour que chaque tasse soit un peu de chaleur offerte.</p>
+    <p style="font-family:'Playfair Display',serif; font-style:italic; font-size:.82rem; color:var(--rose-profond); opacity:.7; margin-top:18px; letter-spacing:.04em;">— Andy, torréfacteur &amp; fondateur</p>
+    <div class="lf-cta-group">
+      <a href="#lf-levee" class="lf-btn-rose">Contribuer maintenant</a>
+      <a href="#lf-histoire" class="lf-btn-ghost">Notre histoire</a>
+    </div>
+  </div>
+  <div class="lf-scroll-hint"><span>Défiler</span><div class="lf-scroll-dot"></div></div>
+</section>
+
+<section class="lf-section lf-reveal" id="lf-histoire">
+  <div class="lf-section-inner">
+    <div class="lf-two-col">
+      <div class="lf-visual-stack">
+        <div class="lf-vis-card v1" style="background-image:url('https://cdn.shopify.com/s/files/1/0683/7413/4981/files/2759.png?v=1773243197'); background-size:cover; background-position:center;">
+          <div class="lf-vis-txt" style="background:rgba(253,220,220,0.35); backdrop-filter:blur(0.4px); border-radius:16px; padding:24px 32px;">
+            <span class="lf-vis-big" style="color:var(--prune-doux); text-shadow: 0 0 25px rgba(255,255,255,1), 0 2px 12px rgba(255,255,255,0.95);">Ensemble</span>
+          </div>
+        </div>
+        <div class="lf-vis-card v2">
+          <div class="lf-vis-txt">
+            <span class="lf-vis-big">5 $ de chaque sac vendu</span>
+            <span class="lf-vis-sm"> soutiennent directement la cause.</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(253,240,240,0.7); backdrop-filter:blur(6px); border-radius:24px; padding:36px;">
+        <span class="lf-eyebrow">✿ Notre mission</span>
+        <h2 class="lf-section-title">Une tasse qui<br><em>fait la différence</em></h2>
+        <p class="lf-body-text">Ce projet est né d'une rencontre authentique entre trois univers qui partagent les mêmes valeurs : l'amour du café de spécialité, l'engagement envers la communauté et la solidarité envers les femmes. Chez Andy Café, chaque sac torréfié avec soin est un geste concret pour soutenir deux organismes essentiels de la Mauricie.</p>
+        <div class="lf-divider"></div>
+        <p class="lf-org-title">✿ La Séjournelle</p>
+        <p class="lf-body-text">La Séjournelle accompagne les femmes et leurs enfants qui vivent des situations de violence conjugale. Elle leur offre un hébergement sécuritaire, une écoute bienveillante et un soutien concret pour les aider à se reconstruire et à retrouver leur autonomie.</p>
+        <div class="lf-divider"></div>
+        <p class="lf-org-title">✿ Espace Flavie</p>
+        <p class="lf-body-text">Espace Flavie crée des milieux de vie sécuritaires et des logements abordables pour les femmes et les familles en situation de vulnérabilité. L'organisme offre un environnement stable et humain qui permet à chacune d'avancer, de se reconstruire et de reprendre le contrôle de sa vie.</p>
+        <div class="lf-chips">
+          <a href="https://lasejournelle.ca/" target="_blank" class="lf-chip">La Séjournelle</a>
+          <a href="https://espacesflavie.ca/" target="_blank" class="lf-chip">Espace Flavie</a>
+          <a href="https://www.andycafetorrefacteur.com" target="_blank" class="lf-chip">Andy Café</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lf-cafe-section lf-reveal">
+  <div class="lf-cafe-inner">
+    <div class="lf-cafe-top">
+      <div class="lf-cafe-text">
+        <span class="lf-eyebrow">✿ Le café de cette édition</span>
+        <h2 class="lf-section-title" style="font-size:clamp(2rem,4.5vw,3.1rem); margin:0 0 16px;">
+          <em>Fazenda São Luiz</em><br>Yellow Catuaí
+        </h2>
+        <p class="lf-body-text" style="margin:0;">Produit par Ana Cecilia Gondim Velloso au Brésil, ce café appartenant à une femme productrice est cultivé avec des pratiques respectueuses de l'environnement depuis plus d'un siècle. Une édition limitée, torréfiée à la main dans notre brûlerie de Shawinigan.</p>
+      </div>
+      <div class="lf-cafe-photo">
+        <img src="https://cdn.shopify.com/s/files/1/0683/7413/4981/files/sao.png?v=1773273401" alt="Ana Cecilia Gondim Velloso — productrice, Fazenda São Luiz" />
+        <p>Ana Cecilia Gondim Velloso<br>Fazenda São Luiz</p>
+      </div>
+    </div>
+    <div class="lf-origin-card">
+      <span class="lf-origin-pays">Cerrado Mineiro, Brésil</span>
+      <span class="lf-origin-estate">Procédé Naturel · Origine Simple · 400 g · Altitude 1 450 m</span>
+      <span class="lf-origin-varietal">Catuaï Jaune · Note SCA 85.5 · Grade Fine Cup · Torréfaction Brune</span>
+    </div>
+    <div class="lf-notes">
+      <span class="lf-note">🍫 Chocolat Ferrero-Rocher</span>
+      <span class="lf-note">🍓 Framboise</span>
+      <span class="lf-note">🌰 Noisette</span>
+      <span class="lf-note">☁️ Corps crémeux</span>
+      <span class="lf-note">🍑 Arrière-goût doux et persistant</span>
+    </div>
+    <div class="lf-notes" style="margin-top:14px;">
+      <span class="lf-note" style="border-color:rgba(138,48,80,.2); color:var(--pivoine);">☕ Espresso</span>
+      <span class="lf-note" style="border-color:rgba(138,48,80,.2); color:var(--pivoine);">🫗 Filtre</span>
+      <span class="lf-note" style="border-color:rgba(138,48,80,.2); color:var(--pivoine);">🧉 Presse française</span>
+    </div>
+  </div>
+</section>
+
+<section class="lf-levee-section lf-reveal" id="lf-levee">
+  <div class="lf-levee-inner">
+    <div class="lf-fdiv"><div class="lf-fdiv-l"></div><span class="lf-fdiv-ico">✿</span><div class="lf-fdiv-l r"></div></div>
+    <span class="lf-eyebrow" style="margin-top:14px;">✿ Levée de fonds</span>
+    <h2 class="lf-section-title" style="font-size:clamp(2rem,5vw,3.4rem);">Choisissez votre<br><em>façon de contribuer</em></h2>
+    <p class="lf-body-text" style="max-width:530px;margin:0 auto;">Chaque sac de 400 g vendu est un geste concret pour soutenir les femmes et les familles de la Mauricie.</p>
+
+    {%- assign vendus = shop.metafields.custom.sacs_vendus.value | plus: 0 -%}
+    {%- assign objectif = section.settings.objectif_sacs | default: 25 -%}
+    {%- assign pct = vendus | times: 100 | divided_by: objectif -%}
+    {%- if pct > 100 -%}{%- assign pct = 100 -%}{%- endif -%}
+    {%- if vendus == 0 -%}
+      {%- assign msg = "Soyez parmi les premiers à contribuer ✿" -%}
+    {%- elsif pct < 25 -%}
+      {%- assign msg = "Le mouvement commence — merci d'y croire ✿" -%}
+    {%- elsif pct < 50 -%}
+      {%- assign msg = "Bel élan ! Chaque sac compte énormément ✿" -%}
+    {%- elsif pct < 75 -%}
+      {%- assign msg = "Plus de la moitié du chemin — vous êtes incroyables ✿" -%}
+    {%- elsif pct < 100 -%}
+      {%- assign msg = "On y est presque ! La communauté se mobilise ✿" -%}
+    {%- else -%}
+      {%- assign msg = "Objectif atteint ! Merci du fond du cœur ✿" -%}
+    {%- endif -%}
+
+    <div class="lf-compteur-wrap lf-reveal">
+      <div class="lf-compteur-card">
+        <span class="lf-compteur-ico">☕</span>
+        <div class="lf-compteur-num" id="lfCompteurNum" data-target="{{ vendus }}">0</div>
+        <div class="lf-compteur-label">sacs vendus</div>
+        <div class="lf-compteur-sub">Chaque sac = un geste concret<br>pour les femmes de la Mauricie</div>
+        <div class="lf-compteur-bar-wrap">
+          <div class="lf-compteur-bar" id="lfCompteurBar" data-pct="{{ pct }}"></div>
+        </div>
+        <div class="lf-compteur-encouragement" id="lfEncouragement">{{ msg }}</div>
+      </div>
+    </div>
+
+    <div class="lf-forfaits">
+      <div class="lf-forfait lf-reveal">
+        <div class="lf-fi">
+          <div class="lf-forf-ico">🌷</div>
+          <div class="lf-f-nom">Don personnalisé</div>
+          <div class="lf-f-prix" style="font-size:1.55rem; margin-top:14px;">Montant libre</div>
+          <div class="lf-f-poids">à votre discrétion</div>
+          <div class="lf-f-sep"></div>
+          <div class="lf-f-desc">Contribuez selon votre cœur<br>Chaque dollar va directement<br>aux organismes de la Mauricie</div>
+          <a href="https://link.clover.com/urlshortener/vTXcBX" class="lf-f-btn lf-btn-lancement" data-href="https://link.clover.com/urlshortener/vTXcBX" style="opacity:.6; cursor:not-allowed; pointer-events:none;">Contribuer<span class="lf-btn-sub" style="display:block; font-size:.58rem; letter-spacing:.12em; margin-top:4px;">Disponible samedi à 9h ✿</span></a>
+        </div>
+      </div>
+      <div class="lf-forfait lf-reveal">
+        <div class="lf-fi">
+          <div class="lf-forf-ico">🌸</div>
+          <div class="lf-f-nom">La Gorgée</div>
+          <div class="lf-f-prix">28 $</div>
+          <div class="lf-f-poids">1 sac · 400 g</div>
+          <div class="lf-f-sep"></div>
+          <div class="lf-f-desc">Un sac de café de spécialité<br>Fazenda São Luiz – Yellow Catuaí<br>Livraison disponible</div>
+          <a href="/products/sac-par-les-femmes-pour-les-femmes-fazenda-sao-luiz-400g" class="lf-f-btn lf-btn-lancement" data-href="/products/sac-par-les-femmes-pour-les-femmes-fazenda-sao-luiz-400g" style="opacity:.6; cursor:not-allowed; pointer-events:none;">Ajouter au panier<span class="lf-btn-sub" style="display:block; font-size:.58rem; letter-spacing:.12em; margin-top:4px;">Disponible samedi à 9h ✿</span></a>
+        </div>
+      </div>
+      <div class="lf-forfait star lf-reveal">
+        <div class="lf-fi">
+          <div class="lf-forf-ico">🌺</div>
+          <div class="lf-f-nom">La Bouquet</div>
+          <div class="lf-f-prix">55 $</div>
+          <div class="lf-f-poids">2 sacs · 2 × 400 g</div>
+          <div class="lf-f-sep"></div>
+          <div class="lf-f-desc">Deux sacs de café de spécialité<br>Fazenda São Luiz – Yellow Catuaí<br>Votre nom écrit sur notre page remerciement</div>
+          <a href="#" onclick="ouvrirPopupBouquet(event)" class="lf-f-btn lf-btn-lancement" data-href="#" style="opacity:.6; cursor:not-allowed; pointer-events:none;">Ajouter au panier<span class="lf-btn-sub" style="display:block; font-size:.58rem; letter-spacing:.12em; margin-top:4px;">Disponible samedi à 9h ✿</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lf-impact-section lf-reveal">
+  <div class="lf-impact-inner">
+    <span class="lf-eyebrow">✿ Notre impact</span>
+    <h2 class="lf-section-title" style="font-size:clamp(1.8rem,4vw,2.8rem);">Ensemble, on<br><em>bâtit quelque chose</em></h2>
+    <div class="lf-impact-grid">
+      <div><div class="lf-impact-num">5 $</div><div class="lf-impact-label">de chaque sac vendu<br>versés aux organismes</div></div>
+      <div><div class="lf-impact-num">2</div><div class="lf-impact-label">organismes soutenus<br>en Mauricie</div></div>
+      <div><div class="lf-impact-num">∞</div><div class="lf-impact-label">tasses de solidarité<br>versées avec amour</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="lf-remerciements lf-reveal">
+  <div class="lf-rem-inner">
+    <div class="lf-fdiv"><div class="lf-fdiv-l"></div><span class="lf-fdiv-ico">✿</span><div class="lf-fdiv-l r"></div></div>
+    <span class="lf-eyebrow" style="margin-top:14px;">✿ Nos bienfaiteurs</span>
+    <h2 class="lf-section-title" style="font-size:clamp(1.8rem,4vw,2.8rem);">Merci à ceux qui<br><em>ont fait la différence</em></h2>
+    <p class="lf-body-text" style="max-width:480px; margin:0 auto 40px;">Chaque prénom ici représente un geste concret pour les femmes de la Mauricie. ✿</p>
+    <div id="lfPrenoms" class="lf-prenoms-grid"></div>
+    <div class="lf-rem-form">
+      <p class="lf-rem-intro">Vous avez acheté <em>La Bouquet</em> ? Laissez votre prénom ici ✿</p>
+      <div class="lf-rem-input-wrap">
+        <input type="text" id="lfPrenomInput" class="lf-rem-input" placeholder="Votre prénom…" maxlength="30" autocomplete="off"/>
+        <button class="lf-rem-btn" onclick="soumettrePrenom()">✿ Ajouter</button>
+      </div>
+      <div class="lf-rem-msg" id="lfRemMsg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Popup La Bouquet ── -->
+<div class="lf-popup-overlay" id="lfPopupBouquet">
+  <div class="lf-popup-box">
+    <div class="lf-popup-titre">Votre prénom ✿</div>
+    <p class="lf-popup-sous">Vous achetez <em>La Bouquet</em> — votre prénom sera affiché sur notre page de remerciements. C'est optionnel !</p>
+    <input type="text" class="lf-popup-input" id="lfPopupPrenom" placeholder="Votre prénom…" maxlength="30" autocomplete="off"/>
+    <div class="lf-popup-btns">
+      <button class="lf-popup-btn-oui" onclick="confirmerBouquet()">✿ Ajouter mon prénom</button>
+      <button class="lf-popup-btn-non" onclick="continuerSansPrenom()">Continuer sans prénom</button>
+    </div>
+  </div>
+</div>
+
+<div class="lf-footer">
+  <div class="lf-ft">
+    <div class="lf-ft-brand">Andy Café Torréfacteur</div>
+    <div class="lf-ft-partners">La Séjournelle · Espace Flavie · Shawinigan, Mauricie</div>
+    <div class="lf-ft-line"></div>
+    <div class="lf-ft-copy">© 2025 Andy Café · Fait avec soin à Shawinigan</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var field = document.getElementById('lfPetaleField');
+  if(field){
+    var colors = ['#f9dada','#f4c5c5','#e8969a','#fce8ea','#f7d0d8','#fad2da','#c8dbc0'];
+    for(var i=0;i<60;i++){
+      (function(){
+        var el = document.createElementNS('http://www.w3.org/2000/svg','svg');
+        var size = 9 + Math.random()*18;
+        var col = colors[Math.floor(Math.random()*colors.length)];
+        var isLeaf = col === '#c8dbc0';
+        el.setAttribute('viewBox','0 0 40 52');
+        el.setAttribute('width',size);
+        el.setAttribute('height',size*1.35);
+        if(isLeaf){
+          el.innerHTML = '<ellipse cx="20" cy="26" rx="10" ry="24" fill="'+col+'" opacity=".7" transform="rotate('+ (-20+Math.random()*40) +' 20 26)"/>';
+        } else {
+          el.innerHTML = '<ellipse cx="20" cy="26" rx="14" ry="23" fill="'+col+'" opacity=".72"/><ellipse cx="20" cy="26" rx="5" ry="20" fill="rgba(255,255,255,.2)" transform="rotate(-12 20 26)"/>';
+        }
+        el.classList.add('lf-petale');
+        el.style.left = Math.random()*100+'vw';
+        var dur = 6+Math.random()*9;
+        var delay = Math.random()*12;
+        el.style.animation = 'lfTombePetale '+dur+'s '+delay+'s linear infinite';
+        field.appendChild(el);
+      })();
+    }
+  }
+
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e,i){ if(e.isIntersecting) setTimeout(function(){ e.target.classList.add('visible'); },i*80); });
+  },{threshold:.1});
+  document.querySelectorAll('.lf-reveal').forEach(function(r){ obs.observe(r); });
+
+  var numEl = document.getElementById('lfCompteurNum');
+  var barEl = document.getElementById('lfCompteurBar');
+  var encEl = document.getElementById('lfEncouragement');
+  var objectif = 25;
+
+  function animerCompteur(target) {
+    var pct = Math.min((target / objectif) * 100, 100);
+    setTimeout(function(){ barEl.style.width = pct + '%'; }, 400);
+    var messages = [
+      { min:0,  max:0,   msg:"Soyez parmi les premiers à contribuer ✿" },
+      { min:1,  max:24,  msg:"Le mouvement commence — merci d'y croire ✿" },
+      { min:25, max:49,  msg:"Bel élan ! Chaque sac compte énormément ✿" },
+      { min:50, max:74,  msg:"Plus de la moitié du chemin — vous êtes incroyables ✿" },
+      { min:75, max:99,  msg:"On y est presque ! La communauté se mobilise ✿" },
+      { min:100,max:9999,msg:"Objectif atteint ! Merci du fond du cœur ✿" }
+    ];
+    var pctVal = Math.round(pct);
+    messages.forEach(function(m){
+      if(pctVal >= m.min && pctVal <= m.max && encEl) encEl.textContent = m.msg;
+    });
+    if(target === 0){ numEl.textContent = '0'; return; }
+    var duration = 1800, startTime = null;
+    function step(ts){
+      if(!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var ease = 1 - Math.pow(1 - progress, 3);
+      numEl.textContent = Math.round(ease * target);
+      if(progress < 1) requestAnimationFrame(step);
+      else numEl.textContent = target;
+    }
+    requestAnimationFrame(step);
+  }
+
+  function chargerCompteur() {
+    fetch('https://andy-cafe-compteur.vercel.app/api/compteur')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var sacs = data.sacs_vendus || 0;
+        numEl.setAttribute('data-target', sacs);
+        animerCompteur(sacs);
+      })
+      .catch(function(){
+        var fallback = parseInt(numEl.getAttribute('data-target')) || 0;
+        animerCompteur(fallback);
+      });
+  }
+
+  if(numEl && barEl){
+    var started = false;
+    var cObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting && !started){ started = true; chargerCompteur(); }
+      });
+    },{threshold:.5});
+    cObs.observe(numEl);
+    setInterval(chargerCompteur, 300000);
+  }
+
+  /* ── Activation automatique samedi 14 mars à 9h ── */
+  var lancement = new Date('2026-03-14T09:00:00');
+  function verifierLancement() {
+    var maintenant = new Date();
+    var boutons = document.querySelectorAll('.lf-btn-lancement');
+    if (maintenant >= lancement) {
+      boutons.forEach(function(btn) {
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        btn.style.pointerEvents = 'auto';
+        var sub = btn.querySelector('.lf-btn-sub');
+        if (sub) sub.remove();
+      });
+    } else {
+      setTimeout(verifierLancement, 30000);
+    }
+  }
+  verifierLancement();
+
+  /* ── Popup La Bouquet ── */
+  window.ouvrirPopupBouquet = function(e) {
+    e.preventDefault();
+    document.getElementById('lfPopupBouquet').classList.add('active');
+    setTimeout(function(){ document.getElementById('lfPopupPrenom').focus(); }, 300);
+  };
+  window.confirmerBouquet = function() {
+    var prenom = document.getElementById('lfPopupPrenom').value.trim();
+    if (prenom) {
+      fetch('https://andy-cafe-compteur.vercel.app/api/prenoms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prenom: prenom })
+      });
+    }
+    document.getElementById('lfPopupBouquet').classList.remove('active');
+    window.location.href = '/products/sac-par-les-femmes-pour-les-femmes-fazenda-sao-luiz-400g';
+  };
+  window.continuerSansPrenom = function() {
+    document.getElementById('lfPopupBouquet').classList.remove('active');
+    window.location.href = '/products/sac-par-les-femmes-pour-les-femmes-fazenda-sao-luiz-400g';
+  };
+
+  /* ── Prénoms remerciements ── */
+  function chargerPrenoms() {
+    fetch('https://andy-cafe-compteur.vercel.app/api/prenoms')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var grid = document.getElementById('lfPrenoms');
+        if (!grid) return;
+        grid.innerHTML = '';
+        (data.prenoms || []).forEach(function(p) {
+          var tag = document.createElement('div');
+          tag.className = 'lf-prenom-tag';
+          tag.textContent = '✿ ' + p;
+          grid.appendChild(tag);
+        });
+        if (!data.prenoms || data.prenoms.length === 0) {
+          grid.innerHTML = '<p style="font-family:\'Playfair Display\',serif;font-style:italic;color:var(--rose-vif);opacity:.6;">Soyez le premier à laisser votre prénom ✿</p>';
+        }
+      });
+  }
+
+  window.soumettrePrenom = function() {
+    var input = document.getElementById('lfPrenomInput');
+    var msg = document.getElementById('lfRemMsg');
+    var prenom = input.value.trim();
+    if (!prenom) { msg.textContent = 'Entrez votre prénom ✿'; return; }
+    fetch('https://andy-cafe-compteur.vercel.app/api/prenoms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prenom: prenom })
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(){
+      msg.textContent = 'Merci ' + prenom + ' ! ✿';
+      input.value = '';
+      chargerPrenoms();
+    });
+  };
+
+  chargerPrenoms();
+  setInterval(chargerPrenoms, 60000);
+
+  document.querySelectorAll('a[href^="#lf-"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t = document.querySelector(a.getAttribute('href'));
+      if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Levée de fonds",
+  "settings": [
+    {
+      "type": "number",
+      "id": "sacs_vendus",
+      "label": "Nombre de sacs vendus",
+      "info": "Mets à jour ce chiffre manuellement après chaque vente.",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "objectif_sacs",
+      "label": "Objectif (nombre de sacs)",
+      "default": 25
+    }
+  ]
+}
+{% endschema %}

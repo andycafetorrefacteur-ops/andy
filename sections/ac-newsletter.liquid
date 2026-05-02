@@ -1,0 +1,70 @@
+{% comment %}
+  Section: Andy Café Newsletter
+  Emplacement: sections/ac-newsletter.liquid
+{% endcomment %}
+
+<section class="ac-signup-section">
+  <div class="ac-signup-inner ac-reveal">
+    <h2>{{ section.settings.title }}</h2>
+    <p>{{ section.settings.description }}</p>
+    
+    {% form 'customer', class: 'ac-signup-form' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <input type="email" 
+             name="contact[email]" 
+             placeholder="{{ section.settings.placeholder }}"
+             required
+             autocomplete="email">
+      <button type="submit">{{ section.settings.button_text }}</button>
+    {% endform %}
+    
+    {% if form.posted_successfully? %}
+      <p style="color: var(--ac-accent); margin-top: 16px;">{{ section.settings.success_message }}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "AC - Newsletter",
+  "tag": "section",
+  "class": "ac-newsletter-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Restez au courant"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Inscrivez-vous pour nos dernières nouvelles, cuvées exclusives et offres spéciales."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder email",
+      "default": "Votre adresse email"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "S'inscrire"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Message de succès",
+      "default": "Merci pour votre inscription!"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AC - Newsletter"
+    }
+  ]
+}
+{% endschema %}

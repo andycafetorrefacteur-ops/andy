@@ -1,0 +1,757 @@
+<!doctype html>
+<html
+  {% if request.design_mode %}
+    class="shopify-design-mode"
+  {% endif %}
+  lang="{{ request.locale.iso_code }}"
+>
+  <head>
+    {%- if settings.favicon != blank -%}
+      <link
+        rel="icon"
+        type="image/png"
+        href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
+      >
+    {%- endif -%}
+
+    {% comment %} This a way to wait for main content to load when navigating to a new page so that the view transitions can work consistently {% endcomment %}
+    {% if settings.transition_to_main_product or settings.page_transition_enabled %}
+      <link
+        rel="expect"
+        href="#MainContent"
+        blocking="render"
+        id="view-transition-render-blocker"
+      >
+    {% endif %}
+
+    {%- render 'meta-tags' -%}
+    {%- render 'stylesheets' -%}
+    {{ 'andy-animations.css' | asset_url | stylesheet_tag }}
+    {%- render 'fonts' -%}
+    {%- render 'scripts' -%}
+    {%- render 'theme-styles-variables' -%}
+    {%- render 'color-schemes' -%}
+
+    {% if request.design_mode %}
+      {%- render 'theme-editor' -%}
+    {% endif %}
+
+    {{ content_for_header }}
+
+  </head>
+
+  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
+    {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
+    <div id="header-group">
+      {% sections 'header-group' %}
+    </div>
+
+    <script>
+      // Inline header height calculation to prevent layout shift
+      // Note: Updates in calculateHeaderGroupHeight() and updateTransparentHeaderOffset()utilities.js should be kept in sync with this function
+      (function setHeaderHeighCustomProperties() {
+        /*
+         * Header calculation functions for maintaining CSS variables
+         * Mimic calculateHeaderGroupHeight() in utilities.js
+         */
+        const header = document.querySelector('header-component');
+        const headerGroup = document.querySelector('#header-group');
+        const hasHeaderSection = headerGroup?.querySelector('.header-section');
+
+        if (!header || !headerGroup) return;
+
+        const headerHeight = header.offsetHeight;
+
+        // Calculate the total height of the header group
+        let headerGroupHeight = 0;
+        const children = headerGroup.children;
+        for (let i = 0; i < children.length; i++) {
+          const element = children[i];
+          if (element === header || !(element instanceof HTMLElement)) continue;
+          headerGroupHeight += element.offsetHeight;
+        }
+
+        // Check for transparent header special case
+        if (header.hasAttribute('transparent') && header.parentElement?.nextElementSibling) {
+          headerGroupHeight += headerHeight;
+        }
+
+        // Set CSS variables
+        document.body.style.setProperty('--header-height', `${headerHeight}px`);
+        document.body.style.setProperty('--header-group-height', `${headerGroupHeight}px`);
+
+        /**
+         * Updates CSS custom properties for transparent header offset calculation
+         * Mimic updateTransparentHeaderOffset() in utilities.js
+         */
+
+        if (!hasHeaderSection || !header?.hasAttribute('transparent')) {
+          document.body.style.setProperty('--transparent-header-offset-boolean', '0');
+          return;
+        }
+
+        const hasImmediateSection = hasHeaderSection.nextElementSibling?.classList.contains('shopify-section');
+
+        const shouldApplyOffset = !hasImmediateSection ? '1' : '0';
+        document.body.style.setProperty('--transparent-header-offset-boolean', shouldApplyOffset);
+      })();
+    </script>
+
+    <main
+      id="MainContent"
+      class="content-for-layout"
+      role="main"
+      data-page-transition-enabled="{{ settings.page_transition_enabled }}"
+      data-product-transition="{{ settings.transition_to_main_product }}"
+      data-template="{{ template }}"
+    >
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% render 'search-modal' %}
+
+    {% if settings.quick_add or settings.mobile_quick_add %}
+      {% render 'quick-add-modal' %}
+    {% endif %}
+<!-- Andy Café Quiz - Version Fonctionnelle Complète ☕ -->
+<style>
+  .andy-quiz-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 15, 10, 0);
+    z-index: 9999;
+    transition: background 0.6s ease;
+  }
+
+  .andy-quiz-overlay.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(20, 15, 10, 0.9);
+  }
+
+  .andy-quiz-box {
+    background: linear-gradient(135deg, #F5EBE0 0%, #E8D5C4 100%);
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 50px 40px;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(139, 69, 19, 0.6);
+    transform: scale(0.5);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .andy-quiz-overlay.active .andy-quiz-box {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .andy-quiz-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #8B4513;
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);
+    z-index: 10;
+  }
+
+  .andy-quiz-close:hover {
+    background: #A0522D;
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  .andy-quiz-progress {
+    height: 6px;
+    background: rgba(139, 69, 19, 0.2);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+
+  .andy-quiz-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #8B4513, #D4A574);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .andy-quiz-step {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .andy-quiz-step.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .andy-quiz-emoji {
+    font-size: 70px;
+    margin-bottom: 20px;
+    display: inline-block;
+    animation: bounce 1s ease;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .andy-quiz-question {
+    font-family: Georgia, serif;
+    font-size: 28px;
+    color: #8B4513;
+    margin: 0 0 30px;
+    font-weight: 700;
+  }
+
+  .andy-quiz-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+  }
+
+  .andy-quiz-option {
+    background: white;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    padding: 25px 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 5px 20px rgba(139, 69, 19, 0.1);
+  }
+
+  .andy-quiz-option:hover {
+    transform: translateY(-8px) scale(1.05);
+    border-color: #D4A574;
+    box-shadow: 0 15px 35px rgba(139, 69, 19, 0.25);
+  }
+
+  .andy-quiz-option:active {
+    transform: translateY(-4px) scale(1.02);
+  }
+
+  .andy-quiz-option-emoji {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .andy-quiz-option-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: #6B5540;
+    margin: 0;
+  }
+
+  .andy-quiz-option:hover .andy-quiz-option-text {
+    color: #8B4513;
+  }
+
+  .andy-quiz-result {
+    text-align: center;
+  }
+
+  .andy-quiz-result-image-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    margin: 25px auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(139, 69, 19, 0.3);
+    animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes popIn {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+
+  .andy-quiz-result-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    object-position: center 65%;
+    display: block;
+  }
+
+  .andy-quiz-result-emoji-overlay {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 60px;
+    background: rgba(255, 255, 255, 0.95);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+  }
+
+  .andy-quiz-result-title {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    color: #8B4513;
+    margin: 20px 0 15px;
+    font-weight: 700;
+    animation: slideUp 0.6s ease 0.2s both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .andy-quiz-result-desc {
+    font-size: 16px;
+    color: #6B5540;
+    margin: 15px 0 25px;
+    line-height: 1.6;
+    animation: slideUp 0.6s ease 0.4s both;
+  }
+
+  .andy-quiz-result-tags {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    animation: slideUp 0.6s ease 0.3s both;
+  }
+
+  .andy-quiz-result-tag {
+    background: linear-gradient(135deg, #D4A574, #C19A6B);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .andy-quiz-btn {
+    background: linear-gradient(135deg, #8B4513, #A0522D);
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 10px 5px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+    text-decoration: none;
+    display: inline-block;
+    animation: slideUp 0.6s ease 0.5s both;
+  }
+
+  .andy-quiz-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(139, 69, 19, 0.5);
+  }
+
+  .andy-quiz-btn:active {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .andy-quiz-btn-secondary {
+    background: transparent;
+    border: 2px solid #8B4513;
+    color: #8B4513;
+    box-shadow: none;
+  }
+
+  .andy-quiz-btn-secondary:hover {
+    background: rgba(139, 69, 19, 0.1);
+    transform: translateY(-3px);
+  }
+
+  @media (max-width: 768px) {
+    .andy-quiz-box {
+      padding: 40px 25px;
+      max-height: 95vh;
+    }
+    .andy-quiz-question {
+      font-size: 24px;
+    }
+    .andy-quiz-options {
+      grid-template-columns: 1fr;
+    }
+    .andy-quiz-result-image-wrapper {
+      max-width: 100%;
+    }
+    .andy-quiz-result-image {
+      height: 200px;
+    }
+    .andy-quiz-result-emoji-overlay {
+      font-size: 50px;
+      width: 70px;
+      height: 70px;
+    }
+  }
+</style>
+
+<div class="andy-quiz-overlay" id="andyQuiz">
+  <div class="andy-quiz-box">
+    <button class="andy-quiz-close" onclick="quizClose()">×</button>
+    
+    <div class="andy-quiz-progress">
+      <div class="andy-quiz-progress-bar" id="quizProgressBar"></div>
+    </div>
+
+    <!-- Étape 1 -->
+    <div class="andy-quiz-step active" id="step1">
+      <div class="andy-quiz-emoji">☕</div>
+      <h2 class="andy-quiz-question">Quel profil de saveur vous attire?</h2>
+      <div class="andy-quiz-options">
+        <div class="andy-quiz-option" onclick="quizAnswer(1, 'chocolat')">
+          <span class="andy-quiz-option-emoji">🍫</span>
+          <p class="andy-quiz-option-text">Chocolaté & Gourmand</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(1, 'fruite')">
+          <span class="andy-quiz-option-emoji">🍓</span>
+          <p class="andy-quiz-option-text">Fruité & Vif</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(1, 'tres-fruite')">
+          <span class="andy-quiz-option-emoji">🍇</span>
+          <p class="andy-quiz-option-text">Très Fruité Vif</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(1, 'floral')">
+          <span class="andy-quiz-option-emoji">🌸</span>
+          <p class="andy-quiz-option-text">Floral & Délicat</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(1, 'equilibre')">
+          <span class="andy-quiz-option-emoji">⚖️</span>
+          <p class="andy-quiz-option-text">Équilibré</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Étape 2 -->
+    <div class="andy-quiz-step" id="step2">
+      <div class="andy-quiz-emoji">💪</div>
+      <h2 class="andy-quiz-question">Quelle intensité préférez-vous?</h2>
+      <div class="andy-quiz-options">
+        <div class="andy-quiz-option" onclick="quizAnswer(2, 'intense')">
+          <span class="andy-quiz-option-emoji">🔥</span>
+          <p class="andy-quiz-option-text">Corsé & Intense</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(2, 'moyen')">
+          <span class="andy-quiz-option-emoji">🌟</span>
+          <p class="andy-quiz-option-text">Moyen & Rond</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(2, 'doux')">
+          <span class="andy-quiz-option-emoji">🌤️</span>
+          <p class="andy-quiz-option-text">Doux & Subtil</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Étape 3 -->
+    <div class="andy-quiz-step" id="step3">
+      <div class="andy-quiz-emoji">🥤</div>
+      <h2 class="andy-quiz-question">Comment buvez-vous votre café?</h2>
+      <div class="andy-quiz-options">
+        <div class="andy-quiz-option" onclick="quizAnswer(3, 'espresso')">
+          <span class="andy-quiz-option-emoji">☕</span>
+          <p class="andy-quiz-option-text">Espresso</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(3, 'allonge')">
+          <span class="andy-quiz-option-emoji">🫖</span>
+          <p class="andy-quiz-option-text">Allongé/Filtre</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(3, 'lait')">
+          <span class="andy-quiz-option-emoji">🥛</span>
+          <p class="andy-quiz-option-text">Avec Lait</p>
+        </div>
+        <div class="andy-quiz-option" onclick="quizAnswer(3, 'glace')">
+          <span class="andy-quiz-option-emoji">🧊</span>
+          <p class="andy-quiz-option-text">Glacé</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résultat -->
+    <div class="andy-quiz-step andy-quiz-result" id="stepResult">
+      <h2 class="andy-quiz-question">🎉 Votre café parfait!</h2>
+      
+      <div class="andy-quiz-result-image-wrapper">
+        <img id="resultImage" class="andy-quiz-result-image" src="" alt="Café">
+        <div class="andy-quiz-result-emoji-overlay" id="resultEmojiOverlay">☕</div>
+      </div>
+      
+      <h3 class="andy-quiz-result-title" id="resultName">Café</h3>
+      <div class="andy-quiz-result-tags" id="resultTags"></div>
+      <p class="andy-quiz-result-desc" id="resultDesc">Description</p>
+      <a href="#" class="andy-quiz-btn" id="resultLink" target="_blank">Découvrir ce café</a>
+      <button class="andy-quiz-btn andy-quiz-btn-secondary" onclick="quizRestart()">Recommencer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var quizData = {};
+  var quizStep = 1;
+
+  var coffees = {
+    'bresil': {
+      name: 'Brésil',
+      emoji: '☕',
+      tags: ['Chocolat', 'Noisette', 'Fruits secs'],
+      desc: 'Un café riche et gourmand avec des notes de chocolat et de noisette. Parfait pour ceux qui aiment les saveurs douces et équilibrées.',
+      url: 'https://andycafetorrefacteur.com/products/cafe-origine-bresil',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/BRESIL_770afdde-7d4a-4f7c-b221-48dc6244749b.png?v=1767898122&width=500'
+    },
+    'colombie': {
+      name: 'Colombie',
+      emoji: '🌺',
+      tags: ['Vanille', 'Caramel', 'Cacao'],
+      desc: 'Doux et équilibré avec des touches de vanille et de caramel. Un classique indémodable qui plaît à tous.',
+      url: 'https://andycafetorrefacteur.com/products/cafe-origine-colombie',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/colombie_0bb3a7ba-7cf7-4a52-897c-08b6fbfde347.png?v=1767897908&width=500'
+    },
+    'ethiopie-guji': {
+      name: 'Éthiopie Guji',
+      emoji: '🌸',
+      tags: ['Baies', 'Floral', 'Fruits'],
+      desc: 'Un café exotique et complexe avec des notes fruitées intenses de baies sauvages et des touches florales délicates.',
+      url: 'https://andycafetorrefacteur.com/products/cafe-origine-ethiopie',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/ETHIOPIEGUJI.png?v=1767897863&width=500'
+    },
+    'kenya-aa': {
+      name: 'Kenya AA',
+      emoji: '🌹',
+      tags: ['Agrumes', 'Eau de rose', 'Floral'],
+      desc: 'Un café délicat et raffiné avec une belle acidité d\'agrumes et des notes subtiles d\'eau de rose. Parfait pour les amateurs de cafés floraux.',
+      url: 'https://andycafetorrefacteur.com/products/kenya-aa',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/KENYA_AA.png?v=1769969941&width=500'
+    },
+    'red-plum': {
+      name: 'Colombie El Paraiso Red Plum',
+      emoji: '✨',
+      tags: ['Prune rouge', 'Fruité intense', 'Édition limitée'],
+      desc: 'Notre édition limitée! Un café d\'exception aux notes explosives de prune rouge. Thé, jus de fruits, très juteux et acide.',
+      url: 'https://andycafetorrefacteur.com/products/colombie-el-paraiso-red-plum-cafe-edition-limitee',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/ELPARAISOREDPLUM_2c77d7c2-c6c9-4c38-a3f9-72694764bb9e.png?v=1767905631&width=500'
+    },
+    'lychee-peach': {
+      name: 'Colombie El Paraiso Lychee Peach',
+      emoji: '💫',
+      tags: ['Litchi', 'Pêche', 'Édition limitée'],
+      desc: 'Notre édition limitée qui fait capoter! Des notes vibrantes de litchi et pêche, parfait en café filtre. Thé, jus, très juteux!',
+      url: 'https://andycafetorrefacteur.com/products/colombie-el-paraiso-lychee-peach-cafe-edition-limitee',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/LYCHEEPEACH.png?v=1767906226&width=500'
+    },
+    'melange-andy': {
+      name: 'Mélange Andy',
+      emoji: '☀️',
+      tags: ['Équilibré', 'Riche', 'Passe-partout'],
+      desc: 'Notre signature et valeur sûre! Un mélange parfaitement équilibré qui fonctionne à tout moment. Le passe-partout idéal!',
+      url: 'https://andycafetorrefacteur.com/products/melange-andy',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/melange_andy_site_web.png?v=1767898071&width=500'
+    },
+    'melange-espresso': {
+      name: 'Mélange Espresso',
+      emoji: '🔥',
+      tags: ['Chocolat noir', 'Orange', 'Crémeux'],
+      desc: 'Intense et corsé, spécialement conçu pour l\'espresso. Notes de chocolat noir avec une touche d\'orange et une crema onctueuse.',
+      url: 'https://andycafetorrefacteur.com/products/melange-espresso-andy-cafe',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/MELANGEESPRESSO.png?v=1767897807&width=500'
+    },
+    'colombie-decaf': {
+      name: 'Colombie Décaféiné',
+      emoji: '🌙',
+      tags: ['Sans caféine', 'Doux', 'Caramel'],
+      desc: 'Tout le plaisir du café sans la caféine! Doux et équilibré avec des notes de caramel. Parfait pour le soir ou pour ceux qui évitent la caféine.',
+      url: 'https://andycafetorrefacteur.com/products/colombie-decaf',
+      image: 'https://andycafetorrefacteur.com/cdn/shop/files/COLOMBIE_DECAF.png?v=1769969941&width=500'
+    }
+  };
+
+  window.quizAnswer = function(step, answer) {
+    quizData[step] = answer;
+    
+    var current = document.getElementById('step' + step);
+    current.classList.remove('active');
+    
+    if (step < 3) {
+      quizStep++;
+      setTimeout(function() {
+        document.getElementById('step' + quizStep).classList.add('active');
+        var progress = (quizStep / 3) * 100;
+        document.getElementById('quizProgressBar').style.width = progress + '%';
+      }, 300);
+    } else {
+      setTimeout(function() {
+        quizShowResult();
+      }, 300);
+    }
+  };
+
+  function quizShowResult() {
+    var coffeeKey = quizGetRecommendation();
+    var coffee = coffees[coffeeKey];
+    
+    document.getElementById('resultImage').src = coffee.image;
+    document.getElementById('resultImage').alt = coffee.name;
+    document.getElementById('resultEmojiOverlay').textContent = coffee.emoji;
+    document.getElementById('resultName').textContent = coffee.name;
+    document.getElementById('resultDesc').textContent = coffee.desc;
+    document.getElementById('resultLink').href = coffee.url;
+    
+    var tagsHtml = '';
+    for (var i = 0; i < coffee.tags.length; i++) {
+      tagsHtml += '<span class="andy-quiz-result-tag">' + coffee.tags[i] + '</span>';
+    }
+    document.getElementById('resultTags').innerHTML = tagsHtml;
+    
+    document.getElementById('stepResult').classList.add('active');
+    document.getElementById('quizProgressBar').style.width = '100%';
+  }
+
+  function quizGetRecommendation() {
+    var profile = quizData[1];
+    var intensity = quizData[2];
+    var method = quizData[3];
+    
+    // CHOCOLATÉ & GOURMAND
+    if (profile === 'chocolat') {
+      if (intensity === 'doux') return 'bresil';
+      if (intensity === 'moyen') return 'melange-andy';
+      if (intensity === 'intense') return 'melange-espresso';
+      return 'melange-andy'; // Valeur sûre par défaut
+    }
+    
+    // TRÈS FRUITÉ VIF (Thé, jus, acide, juteux)
+    if (profile === 'tres-fruite') {
+      // Si méthode filtre/allongé, favoriser Lychee Peach (fait capoter!)
+      if (method === 'allonge') return 'lychee-peach';
+      // Sinon choisir aléatoirement entre les deux éditions limitées
+      var limitedEditions = ['red-plum', 'lychee-peach'];
+      var randomIndex = Math.floor(Math.random() * limitedEditions.length);
+      return limitedEditions[randomIndex];
+    }
+    
+    // FRUITÉ & VIF (Floral + fruits)
+    if (profile === 'fruite') {
+      // Si filtre/allongé, privilégier éditions limitées ou Kenya
+      if (method === 'allonge') {
+        var filtreOptions = ['lychee-peach', 'red-plum', 'kenya-aa'];
+        return filtreOptions[Math.floor(Math.random() * filtreOptions.length)];
+      }
+      return 'ethiopie-guji';
+    }
+    
+    // FLORAL & DÉLICAT
+    if (profile === 'floral') {
+      // Alterner entre Éthiopie Guji et Kenya AA
+      var floralOptions = ['ethiopie-guji', 'kenya-aa'];
+      return floralOptions[Math.floor(Math.random() * floralOptions.length)];
+    }
+    
+    // ÉQUILIBRÉ
+    if (profile === 'equilibre') {
+      return 'melange-andy'; // Le passe-partout!
+    }
+    
+    // Par défaut: Mélange Andy (valeur sûre)
+    return 'melange-andy';
+  }
+
+  window.quizRestart = function() {
+    quizData = {};
+    quizStep = 1;
+    
+    document.getElementById('stepResult').classList.remove('active');
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('quizProgressBar').style.width = '0%';
+  };
+
+  window.quizClose = function() {
+    var overlay = document.getElementById('andyQuiz');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    
+    var today = new Date().toDateString();
+    localStorage.setItem('andyQuizShown', today);
+  };
+
+  window.addEventListener('load', function() {
+    // Vérifier si on est sur la page d'accueil
+    var isHomePage = window.location.pathname === '/' || window.location.pathname === '';
+    
+    if (!isHomePage) {
+      return; // Ne pas afficher le quiz si on n'est pas sur la page d'accueil
+    }
+    
+    var shown = localStorage.getItem('andyQuizShown');
+    var today = new Date().toDateString();
+    
+    if (shown !== today) {
+      setTimeout(function() {
+        var quiz = document.getElementById('andyQuiz');
+        if (quiz) {
+          quiz.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }, 1000);
+    }
+  });
+
+  var overlay = document.getElementById('andyQuiz');
+  if (overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) {
+        quizClose();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var quiz = document.getElementById('andyQuiz');
+      if (quiz && quiz.classList.contains('active')) {
+        quizClose();
+      }
+    }
+  });
+})();
+</script>
+  </body>
+</html>

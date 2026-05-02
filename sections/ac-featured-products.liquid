@@ -1,0 +1,155 @@
+{% comment %}
+  Section: Andy Café Featured Products
+  Emplacement: sections/ac-featured-products.liquid
+{% endcomment %}
+
+<section class="ac-section" style="background: var(--ac-bg-light);">
+  <div class="ac-section-inner">
+    <div class="ac-section-header ac-reveal">
+      <h2>
+        {{ section.settings.title_part1 }}
+        {% if section.settings.title_accent != blank %}
+          <em>{{ section.settings.title_accent }}</em>
+        {% endif %}
+      </h2>
+      {% if section.settings.view_all_link != blank %}
+        <a href="{{ section.settings.view_all_link }}" class="ac-view-all">
+          {{ section.settings.view_all_text | default: "Tout voir →" }}
+        </a>
+      {% endif %}
+    </div>
+    
+    <div class="ac-product-grid">
+      {% for product in section.settings.collection.products limit: section.settings.products_limit %}
+        <a href="{{ product.url }}" class="ac-product-card ac-reveal">
+          <div class="ac-product-card-img">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 600 }}" 
+                   alt="{{ product.featured_image.alt | escape }}"
+                   loading="lazy">
+            {% endif %}
+            
+            {% if product.metafields.custom.badge %}
+              <span class="ac-product-badge">{{ product.metafields.custom.badge }}</span>
+            {% elsif product.available == false %}
+              <span class="ac-product-badge">Épuisé</span>
+            {% elsif product.compare_at_price > product.price %}
+              <span class="ac-product-badge">Promo</span>
+            {% endif %}
+          </div>
+          
+          <div class="ac-product-info">
+            {% if product.metafields.custom.origin %}
+              <div class="ac-product-origin">{{ product.metafields.custom.origin }}</div>
+            {% elsif product.vendor != blank %}
+              <div class="ac-product-origin">{{ product.vendor }}</div>
+            {% endif %}
+            
+            <div class="ac-product-name">{{ product.title }}</div>
+            
+            {% if product.metafields.custom.short_description %}
+              <div class="ac-product-desc">{{ product.metafields.custom.short_description }}</div>
+            {% elsif product.description != blank %}
+              <div class="ac-product-desc">{{ product.description | strip_html | truncate: 80 }}</div>
+            {% endif %}
+            
+            <div class="ac-product-footer">
+              <span class="ac-product-price">
+                {{ product.price | money_without_trailing_zeros }}
+                <span class="cur">CAD</span>
+              </span>
+              <button class="ac-add-btn" aria-label="Ajouter au panier">+</button>
+            </div>
+          </div>
+        </a>
+      {% else %}
+        {%- comment -%} Affichage par défaut si aucune collection sélectionnée {%- endcomment -%}
+        {% for i in (1..4) %}
+          <div class="ac-product-card ac-reveal">
+            <div class="ac-product-card-img">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+            <div class="ac-product-info">
+              <div class="ac-product-origin">Origine</div>
+              <div class="ac-product-name">Nom du produit</div>
+              <div class="ac-product-desc">Description du produit...</div>
+              <div class="ac-product-footer">
+                <span class="ac-product-price">18,00$ <span class="cur">CAD</span></span>
+                <button class="ac-add-btn">+</button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Scroll reveal animation
+  document.addEventListener('DOMContentLoaded', function() {
+    const reveals = document.querySelectorAll('.ac-reveal');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    reveals.forEach(el => observer.observe(el));
+  });
+</script>
+
+{% schema %}
+{
+  "name": "AC - Produits vedettes",
+  "tag": "section",
+  "class": "ac-featured-products-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title_part1",
+      "label": "Titre (partie 1)",
+      "default": "Nos cafés"
+    },
+    {
+      "type": "text",
+      "id": "title_accent",
+      "label": "Titre (mot accent en italique)",
+      "default": "classiques"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Nombre de produits",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Texte 'Voir tout'",
+      "default": "Tout voir →"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "Lien 'Voir tout'"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AC - Produits vedettes"
+    }
+  ]
+}
+{% endschema %}

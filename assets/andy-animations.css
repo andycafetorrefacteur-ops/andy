@@ -1,0 +1,368 @@
+/* ============================================
+   ANDY CAFÉ — PREMIUM ANIMATIONS
+   ============================================ */
+
+/* --- Respect user preferences --- */
+@media (prefers-reduced-motion: reduce) {
+  .andy-reveal,
+  .andy-reveal-up,
+  .andy-reveal-left,
+  .andy-reveal-right,
+  .andy-reveal-scale,
+  .andy-stagger-child {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================
+   SCROLL REVEAL BASE STATES
+   ============================================ */
+
+/* Elements start hidden until JS adds .andy-visible */
+.andy-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.andy-reveal.andy-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide up — subtle, elegant */
+.andy-reveal-up {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.andy-reveal-up.andy-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide from left */
+.andy-reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.andy-reveal-left.andy-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Slide from right */
+.andy-reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.andy-reveal-right.andy-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Scale in — for images, cards */
+.andy-reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.andy-reveal-scale.andy-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================
+   STAGGER DELAYS — children animate one by one
+   ============================================ */
+
+.andy-stagger-child { transition-delay: 0s; }
+.andy-stagger-child:nth-child(1) { transition-delay: 0.05s; }
+.andy-stagger-child:nth-child(2) { transition-delay: 0.12s; }
+.andy-stagger-child:nth-child(3) { transition-delay: 0.19s; }
+.andy-stagger-child:nth-child(4) { transition-delay: 0.26s; }
+.andy-stagger-child:nth-child(5) { transition-delay: 0.33s; }
+.andy-stagger-child:nth-child(6) { transition-delay: 0.40s; }
+.andy-stagger-child:nth-child(7) { transition-delay: 0.47s; }
+.andy-stagger-child:nth-child(8) { transition-delay: 0.54s; }
+
+/* ============================================
+   PRODUCT CARDS — hover lift + image zoom
+   ============================================ */
+
+@media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .product-card {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(139, 69, 19, 0.18);
+  }
+
+  /* Image zoom on card hover */
+  .product-card .card-gallery img,
+  .product-card .product-card__image img {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .product-card:hover .card-gallery img,
+  .product-card:hover .product-card__image img {
+    transform: scale(1.06);
+  }
+
+  /* Title color shift */
+  .product-card .product-title,
+  .product-card .product-card__title {
+    transition: color 0.35s ease;
+  }
+
+  .product-card:hover .product-title,
+  .product-card:hover .product-card__title {
+    color: #8B4513;
+  }
+}
+
+/* ============================================
+   COLLECTION CARDS — same premium treatment
+   ============================================ */
+
+@media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .collection-card {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .collection-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(139, 69, 19, 0.15);
+  }
+
+  .collection-card .collection-card__image img {
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .collection-card:hover .collection-card__image img {
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   BUTTONS — elegant press & glow
+   ============================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn,
+  .button,
+  [class*="button"] {
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.3s ease;
+  }
+
+  .btn:hover,
+  .button:hover,
+  [class*="button"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.25);
+  }
+
+  .btn:active,
+  .button:active,
+  [class*="button"]:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 6px rgba(139, 69, 19, 0.15);
+  }
+}
+
+/* ============================================
+   HERO — title fade up on load
+   ============================================ */
+
+@keyframes andy-heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero .hero__content h1,
+  .hero h1 {
+    animation: andy-heroFadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+
+  .hero .hero__content p,
+  .hero .hero__content .text-component {
+    animation: andy-heroFadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both;
+  }
+
+  .hero .hero__content .btn,
+  .hero .hero__content .button,
+  .hero .hero__content [class*="button"] {
+    animation: andy-heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.75s both;
+  }
+}
+
+/* ============================================
+   MARQUEE / TICKER — smooth continuous scroll
+   ============================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .marquee-component {
+    transition: opacity 0.6s ease;
+  }
+
+  .marquee-component:hover {
+    opacity: 0.8;
+  }
+}
+
+/* ============================================
+   MEDIA WITH CONTENT — split layout animations
+   ============================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .media-with-content .media-with-content__media {
+    overflow: hidden;
+  }
+
+  .media-with-content .media-with-content__media img {
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .media-with-content:hover .media-with-content__media img {
+    transform: scale(1.04);
+  }
+}
+
+/* ============================================
+   FOOTER — links hover underline slide
+   ============================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .footer a,
+  footer a {
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .footer a::after,
+  footer a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .footer a:hover::after,
+  footer a:hover::after {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   NAV LINKS — subtle underline on hover
+   ============================================ */
+
+@media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .header__menu-item a,
+  .header-menu__item a {
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .header__menu-item a::after,
+  .header-menu__item a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: #8B4513;
+    border-radius: 1px;
+    transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .header__menu-item a:hover::after,
+  .header-menu__item a:hover::after {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   PRODUCT PAGE — gallery image smooth switch
+   ============================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .media-gallery img,
+  .product-media-gallery img {
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* ============================================
+   CART DRAWER — slide in smooth
+   ============================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  cart-drawer-component {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* ============================================
+   SECTION TITLES — decorative underline
+   ============================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .andy-section-title {
+    position: relative;
+    display: inline-block;
+  }
+
+  .andy-section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, #8B4513, #D4A574);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .andy-section-title.andy-visible::after {
+    width: 100%;
+  }
+}

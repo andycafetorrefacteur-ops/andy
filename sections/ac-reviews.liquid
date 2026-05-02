@@ -1,0 +1,121 @@
+{% comment %}
+  Section: Andy Café Reviews
+  Emplacement: sections/ac-reviews.liquid
+{% endcomment %}
+
+<section class="ac-section" style="background: var(--ac-sand);">
+  <div class="ac-section-inner">
+    <div class="ac-section-header centered ac-reveal">
+      <h2>
+        {{ section.settings.title_part1 }}
+        {% if section.settings.title_accent != blank %}
+          <em>{{ section.settings.title_accent }}</em>
+        {% endif %}
+      </h2>
+    </div>
+    
+    <div class="ac-reviews-grid">
+      {% for block in section.blocks %}
+        <div class="ac-review-card ac-reveal" {{ block.shopify_attributes }}>
+          <div class="ac-review-stars">★★★★★</div>
+          <blockquote>"{{ block.settings.text }}"</blockquote>
+          <div class="ac-review-author">
+            <div class="ac-review-avatar">{{ block.settings.initials }}</div>
+            <div class="ac-review-author-info">
+              <h4>{{ block.settings.author }}</h4>
+              <p>{{ block.settings.role }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "AC - Témoignages",
+  "tag": "section",
+  "class": "ac-reviews-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title_part1",
+      "label": "Titre (partie 1)",
+      "default": "Ce que nos clients"
+    },
+    {
+      "type": "text",
+      "id": "title_accent",
+      "label": "Titre (mot accent)",
+      "default": "disent"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Témoignage",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Témoignage",
+          "default": "Le meilleur café que j'ai jamais goûté. La fraîcheur est incomparable et les arômes sont extraordinaires."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Nom",
+          "default": "Marie Lavoie"
+        },
+        {
+          "type": "text",
+          "id": "initials",
+          "label": "Initiales",
+          "default": "ML"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Rôle/Titre",
+          "default": "Cliente fidèle"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AC - Témoignages",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "text": "Le meilleur café que j'ai jamais goûté. La fraîcheur est incomparable et les arômes sont extraordinaires.",
+            "author": "Marie Lavoie",
+            "initials": "ML",
+            "role": "Cliente fidèle"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "text": "Depuis que j'ai découvert Andy Café, je ne peux plus boire autre chose. Leur engagement envers la qualité se goûte.",
+            "author": "Jean-Pierre Roy",
+            "initials": "JR",
+            "role": "Barista amateur"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "text": "L'abonnement mensuel a transformé mes matins. Chaque livraison est une nouvelle découverte gustative.",
+            "author": "Sophie Martin",
+            "initials": "SM",
+            "role": "Abonnée depuis 2022"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

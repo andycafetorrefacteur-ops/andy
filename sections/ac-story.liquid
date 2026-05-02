@@ -1,0 +1,173 @@
+{% comment %}
+  Section: Andy Café Story
+  Emplacement: sections/ac-story.liquid
+{% endcomment %}
+
+<section class="ac-story-section">
+  <div class="ac-story-inner">
+    <div class="ac-story-visual ac-reveal">
+      {% if section.settings.image %}
+        <img src="{{ section.settings.image | image_url: width: 800 }}" 
+             alt="{{ section.settings.image.alt | escape }}"
+             style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+      {% else %}
+        <div class="ac-story-ring"></div>
+      {% endif %}
+    </div>
+    
+    <div class="ac-story-content ac-reveal">
+      {% if section.settings.tag != blank %}
+        <span class="ac-story-tag">{{ section.settings.tag }}</span>
+      {% endif %}
+      
+      <h2>
+        {{ section.settings.title_line1 }}<br>
+        {{ section.settings.title_line2 }} <em>{{ section.settings.title_accent }}</em>
+      </h2>
+      
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'paragraph' %}
+            <p>{{ block.settings.text }}</p>
+          {% when 'stat' %}
+            {%- comment -%} Stats handled separately below {%- endcomment -%}
+        {% endcase %}
+      {% endfor %}
+      
+      {%- assign stats = section.blocks | where: "type", "stat" -%}
+      {% if stats.size > 0 %}
+        <div class="ac-story-stats">
+          {% for stat in stats %}
+            <div class="ac-stat-item">
+              <h4>{{ stat.settings.number }}</h4>
+              <p>{{ stat.settings.label }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="ac-btn-outline">
+          {{ section.settings.button_text }}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "AC - Notre Histoire",
+  "tag": "section",
+  "class": "ac-story-section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Étiquette",
+      "default": "Notre Histoire"
+    },
+    {
+      "type": "text",
+      "id": "title_line1",
+      "label": "Titre ligne 1",
+      "default": "Nous sommes passionnés"
+    },
+    {
+      "type": "text",
+      "id": "title_line2",
+      "label": "Titre ligne 2",
+      "default": "par l'art du"
+    },
+    {
+      "type": "text",
+      "id": "title_accent",
+      "label": "Mot accent (italique)",
+      "default": "café"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image (optionnel)"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texte du bouton",
+      "default": "En savoir plus"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Lien du bouton"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "name": "Paragraphe",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texte",
+          "default": "Nous nous engageons à offrir des expériences sensorielles inoubliables à chaque gorgée."
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "name": "Statistique",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Nombre",
+          "default": "12+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Libellé",
+          "default": "Pays d'Origine"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AC - Notre Histoire",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "Nous nous engageons à offrir des expériences sensorielles inoubliables à chaque gorgée. Chaque tasse raconte une histoire."
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "De nos sélections soigneuses aux méthodes de torréfaction artisanales, chaque étape est pensée pour éveiller vos sens."
+          }
+        },
+        {
+          "type": "stat",
+          "settings": { "number": "12+", "label": "Pays d'Origine" }
+        },
+        {
+          "type": "stat",
+          "settings": { "number": "47", "label": "Cuvées / An" }
+        },
+        {
+          "type": "stat",
+          "settings": { "number": "98%", "label": "Satisfaits" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+{% comment %}
+  Section: Andy Café Marquee (Bandeau défilant)
+  Emplacement: sections/ac-marquee.liquid
+{% endcomment %}
+
+<div class="ac-marquee-wrap">
+  <div class="ac-marquee-track">
+    {% for block in section.blocks %}
+      <span class="ac-marquee-item">
+        <span class="ac-marquee-dot"></span>
+        {{ block.settings.text }}
+      </span>
+    {% endfor %}
+    {%- comment -%} Dupliquer pour boucle infinie {%- endcomment -%}
+    {% for block in section.blocks %}
+      <span class="ac-marquee-item">
+        <span class="ac-marquee-dot"></span>
+        {{ block.settings.text }}
+      </span>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "AC - Marquee",
+  "tag": "section",
+  "class": "ac-marquee-section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Élément",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texte",
+          "default": "Café artisanal"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AC - Marquee",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Torréfié localement" } },
+        { "type": "item", "settings": { "text": "Grains de spécialité" } },
+        { "type": "item", "settings": { "text": "Commerce équitable" } },
+        { "type": "item", "settings": { "text": "Livraison gratuite 40$+" } },
+        { "type": "item", "settings": { "text": "Fraîcheur garantie" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,149 @@
+{% comment %}
+  Section: Andy Café Collections
+  Emplacement: sections/ac-collections.liquid
+{% endcomment %}
+
+<section class="ac-collections-strip">
+  <div class="ac-section-inner">
+    <div class="ac-section-header ac-reveal" style="margin-bottom: 44px;">
+      <h2>
+        {{ section.settings.title_part1 }}
+        {% if section.settings.title_accent != blank %}
+          <em>{{ section.settings.title_accent }}</em>
+        {% endif %}
+      </h2>
+      {% if section.settings.view_all_link != blank %}
+        <a href="{{ section.settings.view_all_link }}" class="ac-view-all">
+          {{ section.settings.view_all_text | default: "Tout voir →" }}
+        </a>
+      {% endif %}
+    </div>
+    
+    <div class="ac-collections-grid">
+      {% for block in section.blocks %}
+        <a href="{{ block.settings.link }}" class="ac-collection-card ac-reveal" {{ block.shopify_attributes }}>
+          <div class="ac-coll-bg" 
+               {% if block.settings.image %}
+                 style="background-image: url('{{ block.settings.image | image_url: width: 600 }}');"
+               {% else %}
+                 style="background: {{ block.settings.gradient | default: 'linear-gradient(160deg, #2c1a0e, #5d2b09)' }};"
+               {% endif %}>
+          </div>
+          <div class="ac-coll-overlay"></div>
+          <div class="ac-coll-content">
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.subtitle }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "AC - Collections",
+  "tag": "section",
+  "class": "ac-collections-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title_part1",
+      "label": "Titre (partie 1)",
+      "default": "Nos"
+    },
+    {
+      "type": "text",
+      "id": "title_accent",
+      "label": "Titre (mot accent)",
+      "default": "collections"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Texte 'Voir tout'",
+      "default": "Tout voir →"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "Lien 'Voir tout'"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titre",
+          "default": "Origines Uniques"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Sous-titre",
+          "default": "Saveurs distinctives"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (optionnel)"
+        },
+        {
+          "type": "text",
+          "id": "gradient",
+          "label": "Gradient CSS (si pas d'image)",
+          "default": "linear-gradient(160deg, #2c1a0e, #5d2b09)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Lien"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AC - Collections",
+      "blocks": [
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Origines Uniques",
+            "subtitle": "Saveurs distinctives",
+            "gradient": "linear-gradient(160deg, #2c1a0e, #5d2b09)"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Mélanges",
+            "subtitle": "Équilibre parfait",
+            "gradient": "linear-gradient(160deg, #0f0a06, #2a1f15)"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Limited Edition",
+            "subtitle": "Cuvées exclusives",
+            "gradient": "linear-gradient(160deg, #c97a3a, #5d2b09)"
+          }
+        },
+        {
+          "type": "collection",
+          "settings": {
+            "title": "Équipement",
+            "subtitle": "Pour les passionnés",
+            "gradient": "linear-gradient(160deg, #3d1a05, #1a0e05)"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
