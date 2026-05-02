@@ -1,32 +1,34 @@
 {% comment %}
-  Section: Andy Café Reviews
-  Emplacement: sections/ac-reviews.liquid
+  Section: AC Reviews — luxury testimonials
 {% endcomment %}
 
-<section class="ac-section" style="background: var(--ac-sand);">
+<section class="ac-section" {{ section.shopify_attributes }}>
   <div class="ac-section-inner">
-    <div class="ac-section-header centered ac-reveal">
-      <h2>
+    <div class="ac-section-header centered">
+      {% if section.settings.eyebrow != blank %}
+        <span class="lux-eyebrow lux-reveal">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+      <h2 class="lux-reveal-up">
         {{ section.settings.title_part1 }}
         {% if section.settings.title_accent != blank %}
           <em>{{ section.settings.title_accent }}</em>
         {% endif %}
       </h2>
     </div>
-    
-    <div class="ac-reviews-grid">
+
+    <div class="ac-reviews-grid lux-stagger-parent">
       {% for block in section.blocks %}
-        <div class="ac-review-card ac-reveal" {{ block.shopify_attributes }}>
-          <div class="ac-review-stars">★★★★★</div>
-          <blockquote>"{{ block.settings.text }}"</blockquote>
+        <article class="ac-review-card lux-stagger-child" {{ block.shopify_attributes }}>
+          <div class="ac-review-stars" aria-label="5 étoiles sur 5">★★★★★</div>
+          <blockquote>{{ block.settings.text }}</blockquote>
           <div class="ac-review-author">
-            <div class="ac-review-avatar">{{ block.settings.initials }}</div>
+            <div class="ac-review-avatar" aria-hidden="true">{{ block.settings.initials }}</div>
             <div class="ac-review-author-info">
               <h4>{{ block.settings.author }}</h4>
               <p>{{ block.settings.role }}</p>
             </div>
           </div>
-        </div>
+        </article>
       {% endfor %}
     </div>
   </div>
@@ -40,15 +42,21 @@
   "settings": [
     {
       "type": "text",
+      "id": "eyebrow",
+      "label": "Étiquette",
+      "default": "Voix des amateurs"
+    },
+    {
+      "type": "text",
       "id": "title_part1",
       "label": "Titre (partie 1)",
-      "default": "Ce que nos clients"
+      "default": "Une signature qui se"
     },
     {
       "type": "text",
       "id": "title_accent",
-      "label": "Titre (mot accent)",
-      "default": "disent"
+      "label": "Mot accent (italique)",
+      "default": "transmet"
     }
   ],
   "blocks": [
@@ -56,30 +64,10 @@
       "type": "review",
       "name": "Témoignage",
       "settings": [
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Témoignage",
-          "default": "Le meilleur café que j'ai jamais goûté. La fraîcheur est incomparable et les arômes sont extraordinaires."
-        },
-        {
-          "type": "text",
-          "id": "author",
-          "label": "Nom",
-          "default": "Marie Lavoie"
-        },
-        {
-          "type": "text",
-          "id": "initials",
-          "label": "Initiales",
-          "default": "ML"
-        },
-        {
-          "type": "text",
-          "id": "role",
-          "label": "Rôle/Titre",
-          "default": "Cliente fidèle"
-        }
+        { "type": "textarea", "id": "text", "label": "Témoignage", "default": "Le meilleur café que j'ai goûté. Une fraîcheur incomparable, des arômes vivants." },
+        { "type": "text", "id": "author", "label": "Nom", "default": "Marie Lavoie" },
+        { "type": "text", "id": "initials", "label": "Initiales", "default": "ML" },
+        { "type": "text", "id": "role", "label": "Rôle / lieu", "default": "Montréal" }
       ]
     }
   ],
@@ -87,33 +75,9 @@
     {
       "name": "AC - Témoignages",
       "blocks": [
-        {
-          "type": "review",
-          "settings": {
-            "text": "Le meilleur café que j'ai jamais goûté. La fraîcheur est incomparable et les arômes sont extraordinaires.",
-            "author": "Marie Lavoie",
-            "initials": "ML",
-            "role": "Cliente fidèle"
-          }
-        },
-        {
-          "type": "review",
-          "settings": {
-            "text": "Depuis que j'ai découvert Andy Café, je ne peux plus boire autre chose. Leur engagement envers la qualité se goûte.",
-            "author": "Jean-Pierre Roy",
-            "initials": "JR",
-            "role": "Barista amateur"
-          }
-        },
-        {
-          "type": "review",
-          "settings": {
-            "text": "L'abonnement mensuel a transformé mes matins. Chaque livraison est une nouvelle découverte gustative.",
-            "author": "Sophie Martin",
-            "initials": "SM",
-            "role": "Abonnée depuis 2022"
-          }
-        }
+        { "type": "review", "settings": { "text": "Une expérience sensorielle complète. La cuvée Éthiopie est une révélation.", "author": "Marie Lavoie", "initials": "ML", "role": "Montréal" } },
+        { "type": "review", "settings": { "text": "Depuis Andy Café, je ne peux plus revenir en arrière. Le standard est ailleurs.", "author": "Jean-Pierre Roy", "initials": "JR", "role": "Québec" } },
+        { "type": "review", "settings": { "text": "L'abonnement a transformé mes matins en rituel. Chaque livraison est une découverte.", "author": "Sophie Martin", "initials": "SM", "role": "Sherbrooke" } }
       ]
     }
   ]

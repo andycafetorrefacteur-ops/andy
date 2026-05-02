@@ -1,37 +1,68 @@
 {% comment %}
-  Section: Andy Café Hero
-  Emplacement: sections/ac-hero.liquid
+  Section: AC Hero — cinematic dark luxury
 {% endcomment %}
 
-<section class="ac-hero">
-  <div class="ac-hero-bg"></div>
+<section class="ac-hero" {{ section.shopify_attributes }}>
+  {% if section.settings.background_video != blank %}
+    <video class="ac-hero-bg ac-hero-video" autoplay muted loop playsinline preload="metadata"
+           {% if section.settings.background_image %}poster="{{ section.settings.background_image | image_url: width: 1920 }}"{% endif %}>
+      <source src="{{ section.settings.background_video.sources[1].url | default: section.settings.background_video.sources[0].url }}" type="video/mp4">
+    </video>
+  {% elsif section.settings.background_image %}
+    <div class="ac-hero-bg" data-parallax="0.18"
+         style="background: url('{{ section.settings.background_image | image_url: width: 2400 }}') center/cover no-repeat;"></div>
+  {% else %}
+    <div class="ac-hero-bg" data-parallax="0.12"></div>
+  {% endif %}
+
   <div class="ac-hero-overlay"></div>
+  <div class="ac-hero-vignette"></div>
+
   <div class="ac-hero-content">
     {% if section.settings.tag != blank %}
       <span class="ac-hero-tag">{{ section.settings.tag }}</span>
     {% endif %}
-    
+
     <h1>
-      {{ section.settings.title_part1 }} 
+      {{ section.settings.title_part1 }}
       {% if section.settings.title_accent != blank %}
         <em>{{ section.settings.title_accent }}</em>
       {% endif %}
+      {% if section.settings.title_part2 != blank %}
+        <br>{{ section.settings.title_part2 }}
+      {% endif %}
     </h1>
-    
+
     {% if section.settings.description != blank %}
       <p>{{ section.settings.description }}</p>
     {% endif %}
-    
-    {% if section.settings.button_text != blank %}
-      <a href="{{ section.settings.button_link }}" class="ac-btn-primary">
-        {{ section.settings.button_text }}
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"/>
-          <polyline points="12 5 19 12 12 19"/>
-        </svg>
-      </a>
+
+    {% if section.settings.button_text != blank or section.settings.button2_text != blank %}
+      <div class="ac-hero-actions">
+        {% if section.settings.button_text != blank %}
+          <a href="{{ section.settings.button_link }}" class="ac-btn-primary lux-magnetic">
+            {{ section.settings.button_text }}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        {% endif %}
+        {% if section.settings.button2_text != blank %}
+          <a href="{{ section.settings.button2_link }}" class="ac-btn-outline lux-magnetic">
+            {{ section.settings.button2_text }}
+          </a>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
+
+  {% if section.settings.show_scroll_cue %}
+    <div class="ac-hero-scroll" aria-hidden="true">
+      <span class="ac-hero-scroll-line"></span>
+      <span>{{ section.settings.scroll_label | default: 'Scroll' }}</span>
+    </div>
+  {% endif %}
 </section>
 
 {% schema %}
@@ -40,6 +71,10 @@
   "tag": "section",
   "class": "ac-hero-section",
   "settings": [
+    {
+      "type": "header",
+      "content": "Contenu"
+    },
     {
       "type": "text",
       "id": "tag",
@@ -50,30 +85,81 @@
       "type": "text",
       "id": "title_part1",
       "label": "Titre (partie 1)",
-      "default": "Café d'"
+      "default": "L'art du"
     },
     {
       "type": "text",
       "id": "title_accent",
-      "label": "Titre (mot accent)",
-      "default": "exception"
+      "label": "Titre (mot accent — italique)",
+      "default": "café"
+    },
+    {
+      "type": "text",
+      "id": "title_part2",
+      "label": "Titre (ligne 2)",
+      "default": "réinventé"
     },
     {
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "Savourez chaque instant avec nos cafés uniques. Plongez dans un univers de découvertes aromatiques."
+      "default": "Origines rares, torréfaction artisanale, expériences sensorielles. Chaque tasse, une signature."
+    },
+    {
+      "type": "header",
+      "content": "Boutons"
     },
     {
       "type": "text",
       "id": "button_text",
-      "label": "Texte du bouton",
+      "label": "Bouton primaire",
       "default": "Découvrir nos cafés"
     },
     {
       "type": "url",
       "id": "button_link",
-      "label": "Lien du bouton"
+      "label": "Lien primaire"
+    },
+    {
+      "type": "text",
+      "id": "button2_text",
+      "label": "Bouton secondaire",
+      "default": "Notre histoire"
+    },
+    {
+      "type": "url",
+      "id": "button2_link",
+      "label": "Lien secondaire"
+    },
+    {
+      "type": "header",
+      "content": "Arrière-plan"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Image de fond"
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Vidéo de fond (optionnel — prend le dessus sur l'image)"
+    },
+    {
+      "type": "header",
+      "content": "Indicateur scroll"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_cue",
+      "label": "Afficher l'indicateur de défilement",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "scroll_label",
+      "label": "Texte indicateur",
+      "default": "Découvrir"
     }
   ],
   "presets": [

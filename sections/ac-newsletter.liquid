@@ -1,25 +1,39 @@
 {% comment %}
-  Section: Andy Café Newsletter
-  Emplacement: sections/ac-newsletter.liquid
+  Section: AC Newsletter — luxury subscribe band
 {% endcomment %}
 
-<section class="ac-signup-section">
-  <div class="ac-signup-inner ac-reveal">
-    <h2>{{ section.settings.title }}</h2>
-    <p>{{ section.settings.description }}</p>
-    
-    {% form 'customer', class: 'ac-signup-form' %}
+<section class="ac-signup-section" {{ section.shopify_attributes }}>
+  <div class="ac-signup-inner">
+    {% if section.settings.eyebrow != blank %}
+      <span class="lux-eyebrow lux-reveal">{{ section.settings.eyebrow }}</span>
+    {% endif %}
+
+    <h2 class="lux-reveal-up">
+      {{ section.settings.title }}
+      {% if section.settings.title_accent != blank %} <em>{{ section.settings.title_accent }}</em>{% endif %}
+    </h2>
+
+    {% if section.settings.description != blank %}
+      <p class="lux-reveal">{{ section.settings.description }}</p>
+    {% endif %}
+
+    {% form 'customer', class: 'ac-signup-form lux-reveal' %}
       <input type="hidden" name="contact[tags]" value="newsletter">
-      <input type="email" 
-             name="contact[email]" 
+      <input type="email"
+             name="contact[email]"
              placeholder="{{ section.settings.placeholder }}"
              required
+             aria-label="{{ section.settings.placeholder }}"
              autocomplete="email">
-      <button type="submit">{{ section.settings.button_text }}</button>
+      <button type="submit" class="lux-magnetic">{{ section.settings.button_text }}</button>
     {% endform %}
-    
+
     {% if form.posted_successfully? %}
-      <p style="color: var(--ac-accent); margin-top: 16px;">{{ section.settings.success_message }}</p>
+      <p class="lux-reveal" style="color: var(--ac-gold); margin: 8px 0 0;">{{ section.settings.success_message }}</p>
+    {% endif %}
+
+    {% if section.settings.fineprint != blank %}
+      <p class="ac-signup-fineprint lux-reveal">{{ section.settings.fineprint }}</p>
     {% endif %}
   </div>
 </section>
@@ -32,39 +46,55 @@
   "settings": [
     {
       "type": "text",
+      "id": "eyebrow",
+      "label": "Étiquette",
+      "default": "Lettre confidentielle"
+    },
+    {
+      "type": "text",
       "id": "title",
       "label": "Titre",
-      "default": "Restez au courant"
+      "default": "Le café qui se"
+    },
+    {
+      "type": "text",
+      "id": "title_accent",
+      "label": "Mot accent (italique)",
+      "default": "savoure d'abord"
     },
     {
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "Inscrivez-vous pour nos dernières nouvelles, cuvées exclusives et offres spéciales."
+      "default": "Cuvées exclusives, accès anticipé, rituels de dégustation. Une lettre par mois, jamais plus."
     },
     {
       "type": "text",
       "id": "placeholder",
       "label": "Placeholder email",
-      "default": "Votre adresse email"
+      "default": "votre@adresse.com"
     },
     {
       "type": "text",
       "id": "button_text",
       "label": "Texte du bouton",
-      "default": "S'inscrire"
+      "default": "S'abonner"
     },
     {
       "type": "text",
       "id": "success_message",
       "label": "Message de succès",
-      "default": "Merci pour votre inscription!"
+      "default": "Bienvenue. À bientôt dans votre boîte."
+    },
+    {
+      "type": "text",
+      "id": "fineprint",
+      "label": "Texte légal",
+      "default": "Désinscription en un clic. Pas de spam, jamais."
     }
   ],
   "presets": [
-    {
-      "name": "AC - Newsletter"
-    }
+    { "name": "AC - Newsletter" }
   ]
 }
 {% endschema %}

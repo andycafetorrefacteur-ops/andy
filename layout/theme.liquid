@@ -27,8 +27,13 @@
     {%- render 'meta-tags' -%}
     {%- render 'stylesheets' -%}
     {{ 'andy-animations.css' | asset_url | stylesheet_tag }}
+    {{ 'andy-cafe-custom.css' | asset_url | stylesheet_tag }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap">
     {%- render 'fonts' -%}
     {%- render 'scripts' -%}
+    <script src="{{ 'andy-luxury.js' | asset_url }}" defer></script>
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
 

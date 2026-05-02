@@ -1,38 +1,50 @@
 {% comment %}
-  Section: Andy Café Collections
-  Emplacement: sections/ac-collections.liquid
+  Section: AC Collections — editorial mosaic, dark luxury
 {% endcomment %}
 
-<section class="ac-collections-strip">
+<section class="ac-collections-strip" {{ section.shopify_attributes }}>
   <div class="ac-section-inner">
-    <div class="ac-section-header ac-reveal" style="margin-bottom: 44px;">
-      <h2>
-        {{ section.settings.title_part1 }}
-        {% if section.settings.title_accent != blank %}
-          <em>{{ section.settings.title_accent }}</em>
+    <div class="ac-section-header">
+      <div>
+        {% if section.settings.eyebrow != blank %}
+          <span class="lux-eyebrow lux-reveal">{{ section.settings.eyebrow }}</span>
         {% endif %}
-      </h2>
+        <h2 class="lux-reveal-up">
+          {{ section.settings.title_part1 }}
+          {% if section.settings.title_accent != blank %}
+            <em>{{ section.settings.title_accent }}</em>
+          {% endif %}
+        </h2>
+      </div>
       {% if section.settings.view_all_link != blank %}
-        <a href="{{ section.settings.view_all_link }}" class="ac-view-all">
-          {{ section.settings.view_all_text | default: "Tout voir →" }}
+        <a href="{{ section.settings.view_all_link }}" class="ac-view-all lux-reveal">
+          {{ section.settings.view_all_text | default: 'Toutes les collections' }}
         </a>
       {% endif %}
     </div>
-    
-    <div class="ac-collections-grid">
+
+    <div class="ac-collections-grid lux-stagger-parent">
       {% for block in section.blocks %}
-        <a href="{{ block.settings.link }}" class="ac-collection-card ac-reveal" {{ block.shopify_attributes }}>
-          <div class="ac-coll-bg" 
-               {% if block.settings.image %}
-                 style="background-image: url('{{ block.settings.image | image_url: width: 600 }}');"
-               {% else %}
-                 style="background: {{ block.settings.gradient | default: 'linear-gradient(160deg, #2c1a0e, #5d2b09)' }};"
-               {% endif %}>
-          </div>
+        {%- assign coll = block.settings.collection -%}
+        {%- assign img = block.settings.image | default: coll.image -%}
+        {%- assign title = block.settings.title | default: coll.title -%}
+        {%- assign url = block.settings.link | default: coll.url | default: '#' -%}
+        <a href="{{ url }}" class="ac-collection-card lux-stagger-child" {{ block.shopify_attributes }}>
+          <div class="ac-coll-bg"
+            {% if img %}style="background-image: url('{{ img | image_url: width: 1200 }}');"
+            {% else %}style="background: {{ block.settings.gradient | default: 'linear-gradient(160deg, #1c1814, #0a0807)' }};"{% endif %}></div>
           <div class="ac-coll-overlay"></div>
+          <div class="ac-coll-arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </div>
           <div class="ac-coll-content">
-            <h3>{{ block.settings.title }}</h3>
-            <p>{{ block.settings.subtitle }}</p>
+            <h3>{{ title }}</h3>
+            {% if block.settings.subtitle != blank %}
+              <p>{{ block.settings.subtitle }}</p>
+            {% endif %}
           </div>
         </a>
       {% endfor %}
@@ -46,63 +58,23 @@
   "tag": "section",
   "class": "ac-collections-section",
   "settings": [
-    {
-      "type": "text",
-      "id": "title_part1",
-      "label": "Titre (partie 1)",
-      "default": "Nos"
-    },
-    {
-      "type": "text",
-      "id": "title_accent",
-      "label": "Titre (mot accent)",
-      "default": "collections"
-    },
-    {
-      "type": "text",
-      "id": "view_all_text",
-      "label": "Texte 'Voir tout'",
-      "default": "Tout voir →"
-    },
-    {
-      "type": "url",
-      "id": "view_all_link",
-      "label": "Lien 'Voir tout'"
-    }
+    { "type": "text", "id": "eyebrow", "label": "Étiquette", "default": "L'univers Andy" },
+    { "type": "text", "id": "title_part1", "label": "Titre (partie 1)", "default": "Nos" },
+    { "type": "text", "id": "title_accent", "label": "Mot accent (italique)", "default": "collections" },
+    { "type": "text", "id": "view_all_text", "label": "Texte 'Voir tout'", "default": "Toutes les collections" },
+    { "type": "url", "id": "view_all_link", "label": "Lien 'Voir tout'" }
   ],
   "blocks": [
     {
       "type": "collection",
       "name": "Collection",
       "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Titre",
-          "default": "Origines Uniques"
-        },
-        {
-          "type": "text",
-          "id": "subtitle",
-          "label": "Sous-titre",
-          "default": "Saveurs distinctives"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image (optionnel)"
-        },
-        {
-          "type": "text",
-          "id": "gradient",
-          "label": "Gradient CSS (si pas d'image)",
-          "default": "linear-gradient(160deg, #2c1a0e, #5d2b09)"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Lien"
-        }
+        { "type": "collection", "id": "collection", "label": "Collection (optionnel)" },
+        { "type": "text", "id": "title", "label": "Titre", "default": "Origines Uniques" },
+        { "type": "text", "id": "subtitle", "label": "Sous-titre", "default": "Saveurs distinctives" },
+        { "type": "image_picker", "id": "image", "label": "Image (sinon image de la collection)" },
+        { "type": "text", "id": "gradient", "label": "Gradient CSS (si pas d'image)", "default": "linear-gradient(160deg, #1c1814, #0a0807)" },
+        { "type": "url", "id": "link", "label": "Lien (sinon URL de la collection)" }
       ]
     }
   ],
@@ -110,38 +82,10 @@
     {
       "name": "AC - Collections",
       "blocks": [
-        {
-          "type": "collection",
-          "settings": {
-            "title": "Origines Uniques",
-            "subtitle": "Saveurs distinctives",
-            "gradient": "linear-gradient(160deg, #2c1a0e, #5d2b09)"
-          }
-        },
-        {
-          "type": "collection",
-          "settings": {
-            "title": "Mélanges",
-            "subtitle": "Équilibre parfait",
-            "gradient": "linear-gradient(160deg, #0f0a06, #2a1f15)"
-          }
-        },
-        {
-          "type": "collection",
-          "settings": {
-            "title": "Limited Edition",
-            "subtitle": "Cuvées exclusives",
-            "gradient": "linear-gradient(160deg, #c97a3a, #5d2b09)"
-          }
-        },
-        {
-          "type": "collection",
-          "settings": {
-            "title": "Équipement",
-            "subtitle": "Pour les passionnés",
-            "gradient": "linear-gradient(160deg, #3d1a05, #1a0e05)"
-          }
-        }
+        { "type": "collection", "settings": { "title": "Origines uniques", "subtitle": "Single origin", "gradient": "linear-gradient(160deg, #1c1814, #0a0807)" } },
+        { "type": "collection", "settings": { "title": "Mélanges signature", "subtitle": "Notre maison", "gradient": "linear-gradient(160deg, #28221c, #14110e)" } },
+        { "type": "collection", "settings": { "title": "Édition limitée", "subtitle": "Cuvées rares", "gradient": "linear-gradient(160deg, #b97c5a, #1c1814)" } },
+        { "type": "collection", "settings": { "title": "L'équipement", "subtitle": "Pour le rituel", "gradient": "linear-gradient(160deg, #14110e, #0a0807)" } }
       ]
     }
   ]

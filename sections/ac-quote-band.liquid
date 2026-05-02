@@ -1,14 +1,15 @@
 {% comment %}
-  Section: Andy Café Quote Band
-  Emplacement: sections/ac-quote-band.liquid
+  Section: AC Quote Band — editorial pull-quote
 {% endcomment %}
 
-<div class="ac-quote-band">
-  <blockquote class="ac-reveal">
+<section class="ac-quote-band" {{ section.shopify_attributes }}>
+  <blockquote class="lux-reveal-up">
     <p>{{ section.settings.quote }}</p>
-    <cite>— {{ section.settings.author }}</cite>
+    {% if section.settings.author != blank %}
+      <cite>{{ section.settings.author }}</cite>
+    {% endif %}
   </blockquote>
-</div>
+</section>
 
 {% schema %}
 {
@@ -20,19 +21,17 @@
       "type": "textarea",
       "id": "quote",
       "label": "Citation",
-      "default": "Derrière chaque tasse, il y a quelqu'un qui s'en soucie vraiment — transformez votre routine matinale en un rituel exquis."
+      "default": "Le café n'est pas un produit. C'est un terroir, un geste, un instant. Nous lui devons l'exigence."
     },
     {
       "type": "text",
       "id": "author",
-      "label": "Auteur",
-      "default": "Andy Café, Notre Engagement"
+      "label": "Auteur / Source",
+      "default": "Andy Café — Manifeste"
     }
   ],
   "presets": [
-    {
-      "name": "AC - Citation"
-    }
+    { "name": "AC - Citation" }
   ]
 }
 {% endschema %}

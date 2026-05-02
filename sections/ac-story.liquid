@@ -1,55 +1,55 @@
 {% comment %}
-  Section: Andy Café Story
-  Emplacement: sections/ac-story.liquid
+  Section: AC Story — editorial dark luxury
 {% endcomment %}
 
-<section class="ac-story-section">
+<section class="ac-story-section" {{ section.shopify_attributes }}>
   <div class="ac-story-inner">
-    <div class="ac-story-visual ac-reveal">
+    <div class="ac-story-visual lux-reveal-mask">
       {% if section.settings.image %}
-        <img src="{{ section.settings.image | image_url: width: 800 }}" 
-             alt="{{ section.settings.image.alt | escape }}"
-             style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+        <img src="{{ section.settings.image | image_url: width: 1200 }}"
+             alt="{{ section.settings.image.alt | default: section.settings.title_line1 | escape }}"
+             loading="lazy"
+             width="{{ section.settings.image.width }}"
+             height="{{ section.settings.image.height }}">
       {% else %}
         <div class="ac-story-ring"></div>
       {% endif %}
     </div>
-    
-    <div class="ac-story-content ac-reveal">
+
+    <div class="ac-story-content">
       {% if section.settings.tag != blank %}
-        <span class="ac-story-tag">{{ section.settings.tag }}</span>
+        <span class="ac-story-tag lux-reveal">{{ section.settings.tag }}</span>
       {% endif %}
-      
-      <h2>
-        {{ section.settings.title_line1 }}<br>
-        {{ section.settings.title_line2 }} <em>{{ section.settings.title_accent }}</em>
+
+      <h2 class="lux-reveal-up">
+        {{ section.settings.title_line1 }}{% if section.settings.title_line2 != blank %}<br>{{ section.settings.title_line2 }}{% endif %}{% if section.settings.title_accent != blank %} <em>{{ section.settings.title_accent }}</em>{% endif %}
       </h2>
-      
+
       {% for block in section.blocks %}
         {% case block.type %}
           {% when 'paragraph' %}
-            <p>{{ block.settings.text }}</p>
+            <p class="lux-reveal" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
           {% when 'stat' %}
-            {%- comment -%} Stats handled separately below {%- endcomment -%}
+            {%- comment -%} rendered below {%- endcomment -%}
         {% endcase %}
       {% endfor %}
-      
+
       {%- assign stats = section.blocks | where: "type", "stat" -%}
       {% if stats.size > 0 %}
-        <div class="ac-story-stats">
+        <div class="ac-story-stats lux-reveal-up">
           {% for stat in stats %}
-            <div class="ac-stat-item">
-              <h4>{{ stat.settings.number }}</h4>
+            <div class="ac-stat-item" {{ stat.shopify_attributes }}>
+              <h4 data-counter="{{ stat.settings.number }}">{{ stat.settings.number }}</h4>
               <p>{{ stat.settings.label }}</p>
             </div>
           {% endfor %}
         </div>
       {% endif %}
-      
+
       {% if section.settings.button_text != blank %}
-        <a href="{{ section.settings.button_link }}" class="ac-btn-outline">
+        <a href="{{ section.settings.button_link }}" class="ac-btn-outline lux-magnetic lux-reveal" style="align-self: flex-start; margin-top: 8px;">
           {{ section.settings.button_text }}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"/>
             <polyline points="12 5 19 12 12 19"/>
           </svg>
@@ -75,24 +75,24 @@
       "type": "text",
       "id": "title_line1",
       "label": "Titre ligne 1",
-      "default": "Nous sommes passionnés"
+      "default": "L'obsession"
     },
     {
       "type": "text",
       "id": "title_line2",
       "label": "Titre ligne 2",
-      "default": "par l'art du"
+      "default": "du grain"
     },
     {
       "type": "text",
       "id": "title_accent",
       "label": "Mot accent (italique)",
-      "default": "café"
+      "default": "parfait"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image (optionnel)"
+      "label": "Image"
     },
     {
       "type": "text",
@@ -115,7 +115,7 @@
           "type": "textarea",
           "id": "text",
           "label": "Texte",
-          "default": "Nous nous engageons à offrir des expériences sensorielles inoubliables à chaque gorgée."
+          "default": "De la sélection des fèves vertes à la cuvée finale, chaque étape est l'expression d'une exigence : révéler la singularité du terroir."
         }
       ]
     },
@@ -142,30 +142,11 @@
     {
       "name": "AC - Notre Histoire",
       "blocks": [
-        {
-          "type": "paragraph",
-          "settings": {
-            "text": "Nous nous engageons à offrir des expériences sensorielles inoubliables à chaque gorgée. Chaque tasse raconte une histoire."
-          }
-        },
-        {
-          "type": "paragraph",
-          "settings": {
-            "text": "De nos sélections soigneuses aux méthodes de torréfaction artisanales, chaque étape est pensée pour éveiller vos sens."
-          }
-        },
-        {
-          "type": "stat",
-          "settings": { "number": "12+", "label": "Pays d'Origine" }
-        },
-        {
-          "type": "stat",
-          "settings": { "number": "47", "label": "Cuvées / An" }
-        },
-        {
-          "type": "stat",
-          "settings": { "number": "98%", "label": "Satisfaits" }
-        }
+        { "type": "paragraph", "settings": { "text": "Nous sourçons des fèves rares, brûlées en petits lots dans notre torréfacteur artisanal au cœur du Québec." } },
+        { "type": "paragraph", "settings": { "text": "Chaque cuvée est l'aboutissement d'une rencontre entre un terroir, un torréfacteur, et une tasse." } },
+        { "type": "stat", "settings": { "number": "12", "label": "Pays d'Origine" } },
+        { "type": "stat", "settings": { "number": "47", "label": "Cuvées par an" } },
+        { "type": "stat", "settings": { "number": "98", "label": "% satisfaits" } }
       ]
     }
   ]

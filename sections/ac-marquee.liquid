@@ -1,23 +1,17 @@
 {% comment %}
-  Section: Andy Café Marquee (Bandeau défilant)
-  Emplacement: sections/ac-marquee.liquid
+  Section: AC Marquee — luxury edition (italic display, gold dots, fade edges)
 {% endcomment %}
 
-<div class="ac-marquee-wrap">
+<div class="ac-marquee-wrap" {{ section.shopify_attributes }}>
   <div class="ac-marquee-track">
-    {% for block in section.blocks %}
-      <span class="ac-marquee-item">
-        <span class="ac-marquee-dot"></span>
-        {{ block.settings.text }}
-      </span>
-    {% endfor %}
-    {%- comment -%} Dupliquer pour boucle infinie {%- endcomment -%}
-    {% for block in section.blocks %}
-      <span class="ac-marquee-item">
-        <span class="ac-marquee-dot"></span>
-        {{ block.settings.text }}
-      </span>
-    {% endfor %}
+    {%- for i in (1..2) -%}
+      {% for block in section.blocks %}
+        <span class="ac-marquee-item{% if forloop.index0 | modulo: 2 == 1 %} is-outlined{% endif %}" {{ block.shopify_attributes }}>
+          <span class="ac-marquee-dot" aria-hidden="true"></span>
+          {{ block.settings.text }}
+        </span>
+      {% endfor %}
+    {%- endfor -%}
   </div>
 </div>
 
@@ -36,7 +30,7 @@
           "type": "text",
           "id": "text",
           "label": "Texte",
-          "default": "Café artisanal"
+          "default": "Café d'exception"
         }
       ]
     }
@@ -45,11 +39,11 @@
     {
       "name": "AC - Marquee",
       "blocks": [
-        { "type": "item", "settings": { "text": "Torréfié localement" } },
-        { "type": "item", "settings": { "text": "Grains de spécialité" } },
-        { "type": "item", "settings": { "text": "Commerce équitable" } },
-        { "type": "item", "settings": { "text": "Livraison gratuite 40$+" } },
-        { "type": "item", "settings": { "text": "Fraîcheur garantie" } }
+        { "type": "item", "settings": { "text": "Torréfié au Québec" } },
+        { "type": "item", "settings": { "text": "Origines rares" } },
+        { "type": "item", "settings": { "text": "Petits lots artisanaux" } },
+        { "type": "item", "settings": { "text": "Livraison gratuite 50$+" } },
+        { "type": "item", "settings": { "text": "Fraîcheur signature" } }
       ]
     }
   ]
