@@ -1850,7 +1850,120 @@ cart-drawer-component, .cart-drawer {
 }
 
 /* ============================================================
-   23. UTILITIES
+   23. ACCESSIBILITY — focus rings, touch targets, sr-only
+   (Per WCAG AA + ui-ux-pro-max guidelines)
+   ============================================================ */
+
+/* Visible focus rings — gold outline on keyboard focus only */
+:focus-visible {
+  outline: 2px solid var(--ac-gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+a:focus-visible,
+button:focus-visible,
+.ac-btn-primary:focus-visible,
+.ac-btn-outline:focus-visible {
+  outline: 2px solid var(--ac-gold-bright);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(201, 163, 90, 0.18);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--ac-gold);
+  outline-offset: 1px;
+}
+
+/* Re-show native cursor on focused interactive element (if user is keyboarding) */
+*:focus-visible { cursor: auto; }
+
+/* Touch target safety — ensure clickable areas ≥ 44px */
+@media (any-pointer: coarse) {
+  .ac-btn-primary,
+  .ac-btn-outline,
+  .lux-link,
+  .ac-view-all,
+  .header__menu-item a,
+  nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .ac-add-btn { width: 48px; height: 48px; font-size: 1.25rem; }
+  .ac-coll-arrow { width: 52px; height: 52px; }
+}
+
+/* Skip link visibility (Horizon provides one) */
+.skip-to-content-link:focus {
+  position: fixed !important;
+  top: 16px; left: 16px;
+  background: var(--ac-gold);
+  color: var(--ac-coal) !important;
+  padding: 12px 24px;
+  border-radius: var(--ac-btn-radius);
+  z-index: 99999;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-family: var(--ac-font-body);
+  text-decoration: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reduced-motion safeguards beyond core */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  body { cursor: auto !important; }
+  a, button, input, label { cursor: auto !important; }
+  .lux-cursor-dot, .lux-cursor-ring { display: none !important; }
+}
+
+/* ============================================================
+   24. LIQUID GLASS ACCENT — premium morphing surface
+   Used on hero CTA, header pill on scroll
+   ============================================================ */
+.lux-glass {
+  position: relative;
+  background: rgba(28, 24, 20, 0.5);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(201, 163, 90, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(245, 235, 214, 0.08),
+    0 16px 48px rgba(0, 0, 0, 0.45);
+  transition: background 0.5s var(--ac-ease), border-color 0.5s var(--ac-ease), box-shadow 0.5s var(--ac-ease);
+}
+
+.lux-glass:hover {
+  background: rgba(40, 32, 26, 0.6);
+  border-color: rgba(201, 163, 90, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(245, 235, 214, 0.12),
+    0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================================
+   25. UTILITIES
    ============================================================ */
 .ac-divider-line {
   height: 1px;
