@@ -1,5 +1,5 @@
 {% comment %}
-  Section: AC Hero — cinematic dark luxury
+  Section: AC Hero — editorial cinematic dark
 {% endcomment %}
 
 <section class="ac-hero" {{ section.shopify_attributes }}>
@@ -17,6 +17,14 @@
 
   <div class="ac-hero-overlay"></div>
   <div class="ac-hero-vignette"></div>
+
+  {% if section.settings.show_ornament %}
+    <div class="ac-hero-ornament" aria-hidden="true">{{ section.settings.ornament_letter | default: 'a' }}</div>
+  {% endif %}
+
+  {% if section.settings.section_index != blank %}
+    <div class="ac-hero-index">{{ section.settings.section_index }}</div>
+  {% endif %}
 
   <div class="ac-hero-content">
     {% if section.settings.tag != blank %}
@@ -71,101 +79,32 @@
   "tag": "section",
   "class": "ac-hero-section",
   "settings": [
-    {
-      "type": "header",
-      "content": "Contenu"
-    },
-    {
-      "type": "text",
-      "id": "tag",
-      "label": "Étiquette",
-      "default": "Torréfacteur Artisan · Québec"
-    },
-    {
-      "type": "text",
-      "id": "title_part1",
-      "label": "Titre (partie 1)",
-      "default": "L'art du"
-    },
-    {
-      "type": "text",
-      "id": "title_accent",
-      "label": "Titre (mot accent — italique)",
-      "default": "café"
-    },
-    {
-      "type": "text",
-      "id": "title_part2",
-      "label": "Titre (ligne 2)",
-      "default": "réinventé"
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Description",
-      "default": "Origines rares, torréfaction artisanale, expériences sensorielles. Chaque tasse, une signature."
-    },
-    {
-      "type": "header",
-      "content": "Boutons"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Bouton primaire",
-      "default": "Découvrir nos cafés"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Lien primaire"
-    },
-    {
-      "type": "text",
-      "id": "button2_text",
-      "label": "Bouton secondaire",
-      "default": "Notre histoire"
-    },
-    {
-      "type": "url",
-      "id": "button2_link",
-      "label": "Lien secondaire"
-    },
-    {
-      "type": "header",
-      "content": "Arrière-plan"
-    },
-    {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "Image de fond"
-    },
-    {
-      "type": "video",
-      "id": "background_video",
-      "label": "Vidéo de fond (optionnel — prend le dessus sur l'image)"
-    },
-    {
-      "type": "header",
-      "content": "Indicateur scroll"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_scroll_cue",
-      "label": "Afficher l'indicateur de défilement",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "scroll_label",
-      "label": "Texte indicateur",
-      "default": "Découvrir"
-    }
+    { "type": "header", "content": "Contenu" },
+    { "type": "text", "id": "section_index", "label": "Index latéral (ex: 01 — Le Cabinet)", "default": "01 — Le Cabinet" },
+    { "type": "text", "id": "tag", "label": "Étiquette", "default": "Torréfacteur Artisan · Québec" },
+    { "type": "text", "id": "title_part1", "label": "Titre (partie 1)", "default": "L'art du" },
+    { "type": "text", "id": "title_accent", "label": "Mot accent (italique)", "default": "café" },
+    { "type": "text", "id": "title_part2", "label": "Titre (ligne 2)", "default": "réinventé" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Origines rares, torréfaction artisanale en petits lots, expériences sensorielles. Chaque tasse, une signature." },
+
+    { "type": "header", "content": "Boutons" },
+    { "type": "text", "id": "button_text", "label": "Bouton primaire", "default": "Découvrir nos cafés" },
+    { "type": "url", "id": "button_link", "label": "Lien primaire" },
+    { "type": "text", "id": "button2_text", "label": "Bouton secondaire", "default": "Notre histoire" },
+    { "type": "url", "id": "button2_link", "label": "Lien secondaire" },
+
+    { "type": "header", "content": "Arrière-plan" },
+    { "type": "image_picker", "id": "background_image", "label": "Image de fond" },
+    { "type": "video", "id": "background_video", "label": "Vidéo de fond (prend le dessus sur l'image)" },
+
+    { "type": "header", "content": "Ornement décoratif" },
+    { "type": "checkbox", "id": "show_ornament", "label": "Afficher la lettre décorative géante", "default": true },
+    { "type": "text", "id": "ornament_letter", "label": "Lettre décorative", "default": "a" },
+
+    { "type": "header", "content": "Indicateur scroll" },
+    { "type": "checkbox", "id": "show_scroll_cue", "label": "Afficher l'indicateur de défilement", "default": true },
+    { "type": "text", "id": "scroll_label", "label": "Texte indicateur", "default": "Découvrir" }
   ],
-  "presets": [
-    {
-      "name": "AC - Hero"
-    }
-  ]
+  "presets": [ { "name": "AC - Hero" } ]
 }
 {% endschema %}

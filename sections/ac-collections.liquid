@@ -5,6 +5,7 @@
 <section class="ac-collections-strip" {{ section.shopify_attributes }}>
   <div class="ac-section-inner">
     <div class="ac-section-header">
+      <span class="lux-index lux-reveal">{{ section.settings.section_index | default: '03 — Univers' }}</span>
       <div>
         {% if section.settings.eyebrow != blank %}
           <span class="lux-eyebrow lux-reveal">{{ section.settings.eyebrow }}</span>
@@ -20,6 +21,8 @@
         <a href="{{ section.settings.view_all_link }}" class="ac-view-all lux-reveal">
           {{ section.settings.view_all_text | default: 'Toutes les collections' }}
         </a>
+      {% else %}
+        <span></span>
       {% endif %}
     </div>
 

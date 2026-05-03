@@ -1,6 +1,18 @@
-# Andy Café — Preview Dark Luxury
+# Andy Café — Preview Dark Luxury Editorial · v2
+
+**Le Cabinet de Torréfaction** — direction artistique éditoriale dark luxury.
 
 Captures du rendu généré depuis `preview/index.html` via Chromium headless.
+
+## Identité
+
+- **Display** : Fraunces (variable, opsz 144, SOFT 100, WONK 1 pour les italiques)
+- **UI / corps** : Bricolage Grotesque (variable)
+- **Palette** : coal `#07060a`, ink, cocoa, smoke, accents or champagne `#c9a35a`, oxblood `#5a1c1c`
+- **Numérotation** : `01 — Le Cabinet`, `02 — Histoire`, `03 — Univers`…
+- **Ornements** : lettres italiques géantes en filigrane (le `a` du hero, le `&` de la story)
+- **Cursor** : custom (point + ring qui s'élargit sur les liens)
+- **Animations** : reveal mot par mot dans le hero, mask reveal images, parallax, magnetic, 3D tilt, counters
 
 ## Vue complète
 
@@ -10,31 +22,31 @@ Captures du rendu généré depuis `preview/index.html` via Chromium headless.
 
 ## Sections — Desktop
 
-### 1. Hero
+### 01 — Hero (cinematic, ornement géant)
 ![Hero](screenshots/desktop-01-hero.jpg)
 
-### 2. Marquee
+### Marquee italique (Fraunces 144 wonk)
 ![Marquee](screenshots/desktop-02-marquee.jpg)
 
-### 3. Story
+### 02 — Story (split asymétrique, image clip-corner, ornement `&`)
 ![Story](screenshots/desktop-03-story.jpg)
 
-### 4. Collections
+### 03 — Univers / Collections (mosaïque cassée 12-col, numéros)
 ![Collections](screenshots/desktop-04-collections.jpg)
 
-### 5. Cafés signature
+### 04 — Cuvées (grille éditoriale alternant 1 large + 2 small)
 ![Products](screenshots/desktop-05-products.jpg)
 
-### 6. Quote band
+### Quote band (guillemet géant ornement)
 ![Quote](screenshots/desktop-06-quote.jpg)
 
-### 7. Témoignages
+### 05 — Témoignages (zig-zag offset cards)
 ![Reviews](screenshots/desktop-07-reviews.jpg)
 
-### 8. Newsletter
+### 06 — Lettre (split editorial layout)
 ![Newsletter](screenshots/desktop-08-newsletter.jpg)
 
-### 9. Footer
+### Footer
 ![Footer](screenshots/desktop-09-footer.jpg)
 
 ## Sections — Mobile
@@ -50,3 +62,14 @@ Captures du rendu généré depuis `preview/index.html` via Chromium headless.
 | Reviews | Newsletter | Footer |
 |---|---|---|
 | ![Reviews](screenshots/mobile-07-reviews.jpg) | ![Newsletter](screenshots/mobile-08-newsletter.jpg) | ![Footer](screenshots/mobile-09-footer.jpg) |
+
+## Interactions live (visibles uniquement en navigateur)
+
+- **Custom cursor** desktop : point crème + ring qui s'élargit avec teinte or sur tous les éléments interactifs (mix-blend-mode: difference)
+- **Hero reveal** : titre dévoilé mot par mot (clip-mask + translateY) avec stagger
+- **Cursor-following gradient** : le hero suit la souris avec un orbe doré qui s'éloigne du curseur
+- **Magnetic CTAs** : tous les boutons et liens éditoriaux suivent le curseur
+- **3D tilt** : les cartes produits/collections s'inclinent au passage de souris
+- **Header solidify** : nav devient plus opaque + blur après 24px de scroll
+- **Counters** : 12, 47, 98 s'animent au scroll dans la section histoire
+- **Parallax** : background hero glisse plus lentement que le scroll

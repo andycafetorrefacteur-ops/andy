@@ -5,6 +5,7 @@
 <section class="ac-section" {{ section.shopify_attributes }}>
   <div class="ac-section-inner">
     <div class="ac-section-header centered">
+      <span class="lux-index lux-reveal">{{ section.settings.section_index | default: '05 — Témoignages' }}</span>
       {% if section.settings.eyebrow != blank %}
         <span class="lux-eyebrow lux-reveal">{{ section.settings.eyebrow }}</span>
       {% endif %}

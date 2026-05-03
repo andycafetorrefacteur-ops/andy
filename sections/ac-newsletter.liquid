@@ -4,37 +4,40 @@
 
 <section class="ac-signup-section" {{ section.shopify_attributes }}>
   <div class="ac-signup-inner">
-    {% if section.settings.eyebrow != blank %}
-      <span class="lux-eyebrow lux-reveal">{{ section.settings.eyebrow }}</span>
-    {% endif %}
+    <div class="ac-signup-copy">
+      <span class="lux-index lux-reveal">{{ section.settings.section_index | default: '07 — Lettre' }}</span>
+      {% if section.settings.eyebrow != blank %}
+        <span class="lux-eyebrow lux-reveal">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+      <h2 class="lux-reveal-up">
+        {{ section.settings.title }}
+        {% if section.settings.title_accent != blank %} <em>{{ section.settings.title_accent }}</em>{% endif %}
+      </h2>
+      {% if section.settings.description != blank %}
+        <p class="lux-reveal">{{ section.settings.description }}</p>
+      {% endif %}
+    </div>
 
-    <h2 class="lux-reveal-up">
-      {{ section.settings.title }}
-      {% if section.settings.title_accent != blank %} <em>{{ section.settings.title_accent }}</em>{% endif %}
-    </h2>
+    <div class="ac-signup-form-wrap">
+      {% form 'customer', class: 'ac-signup-form lux-reveal' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="email"
+               name="contact[email]"
+               placeholder="{{ section.settings.placeholder }}"
+               required
+               aria-label="{{ section.settings.placeholder }}"
+               autocomplete="email">
+        <button type="submit" class="lux-magnetic">{{ section.settings.button_text }}</button>
+      {% endform %}
 
-    {% if section.settings.description != blank %}
-      <p class="lux-reveal">{{ section.settings.description }}</p>
-    {% endif %}
+      {% if form.posted_successfully? %}
+        <p class="lux-reveal" style="color: var(--ac-gold);">{{ section.settings.success_message }}</p>
+      {% endif %}
 
-    {% form 'customer', class: 'ac-signup-form lux-reveal' %}
-      <input type="hidden" name="contact[tags]" value="newsletter">
-      <input type="email"
-             name="contact[email]"
-             placeholder="{{ section.settings.placeholder }}"
-             required
-             aria-label="{{ section.settings.placeholder }}"
-             autocomplete="email">
-      <button type="submit" class="lux-magnetic">{{ section.settings.button_text }}</button>
-    {% endform %}
-
-    {% if form.posted_successfully? %}
-      <p class="lux-reveal" style="color: var(--ac-gold); margin: 8px 0 0;">{{ section.settings.success_message }}</p>
-    {% endif %}
-
-    {% if section.settings.fineprint != blank %}
-      <p class="ac-signup-fineprint lux-reveal">{{ section.settings.fineprint }}</p>
-    {% endif %}
+      {% if section.settings.fineprint != blank %}
+        <p class="ac-signup-fineprint lux-reveal">{{ section.settings.fineprint }}</p>
+      {% endif %}
+    </div>
   </div>
 </section>
 

@@ -84,6 +84,24 @@ h3.lux-reveal-line span {
   display: inline-block;
 }
 
+/* Word-by-word hero reveal — clip mask per word */
+.lux-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.lux-word-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lux-word-inner { transform: none !important; transition: none !important; }
+}
+
 /* Stagger children */
 .lux-stagger-child {
   opacity: 0;

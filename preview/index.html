@@ -3,93 +3,100 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Andy Café · Preview Dark Luxury</title>
+  <title>Andy Café · Preview Dark Luxury Editorial v2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,30..100,0..1;1,9..144,300..900,30..100,0..1&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap">
   <link rel="stylesheet" href="../assets/andy-animations.css">
   <link rel="stylesheet" href="../assets/andy-cafe-custom.css">
   <style>
-    /* Minimal Horizon-like header & utility styles for preview only */
+    /* Preview-only header (mimics Horizon header look) */
     .preview-banner {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(10,8,7,0.85); backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(201,169,97,0.2);
-      padding: 14px 32px;
+      background: rgba(7,6,10,0.7);
+      -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(201,163,90,0.15);
+      padding: 16px 32px;
       display: flex; align-items: center; justify-content: space-between;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Bricolage Grotesque', sans-serif;
       font-size: 0.7rem;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: #e8ddc9;
-      transition: background .4s cubic-bezier(0.22,1,0.36,1);
+      color: #ebdcc0;
+      transition: padding .4s cubic-bezier(0.22,1,0.36,1), background .4s cubic-bezier(0.22,1,0.36,1);
     }
-    .preview-banner.lux-header-scrolled { background: rgba(10,8,7,0.92); }
+    .preview-banner.lux-header-scrolled {
+      padding: 12px 32px;
+      background: rgba(7,6,10,0.92);
+    }
     .preview-banner .pb-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.35rem;
-      font-weight: 500;
-      letter-spacing: -0.02em;
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      font-variation-settings: "opsz" 144, "SOFT" 50;
+      letter-spacing: -0.025em;
       text-transform: none;
-      color: #f5ede0;
+      color: #f5ebd6;
     }
-    .preview-banner .pb-logo em { color: #c9a961; font-style: italic; }
-    .preview-banner nav { display: flex; gap: 32px; }
+    .preview-banner .pb-logo em {
+      color: #c9a35a; font-style: italic;
+      font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+    }
+    .preview-banner nav { display: flex; gap: 36px; }
     .preview-banner nav a {
-      color: #e8ddc9; text-decoration: none;
+      color: #ebdcc0; text-decoration: none;
       transition: color .3s cubic-bezier(0.22,1,0.36,1);
+      cursor: none;
     }
-    .preview-banner nav a:hover { color: #c9a961; }
+    .preview-banner nav a:hover { color: #c9a35a; }
     .preview-banner .pb-cta {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 20px;
-      border: 1px solid rgba(201,169,97,0.4);
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 10px 22px;
+      border: 1px solid rgba(201,163,90,0.4);
       border-radius: 999px;
-      color: #c9a961;
+      color: #c9a35a;
       transition: all .4s cubic-bezier(0.22,1,0.36,1);
+      cursor: none;
+      font-size: 0.66rem;
     }
     .preview-banner .pb-cta:hover {
-      background: #c9a961; color: #0a0807;
-      border-color: #c9a961;
+      background: #c9a35a; color: #07060a;
+      border-color: #c9a35a;
     }
     @media (max-width: 768px) {
       .preview-banner nav { display: none; }
       .preview-banner { padding: 12px 20px; }
     }
-
-    /* Container helpers for preview */
-    .preview-section + .preview-section { margin-top: 0; }
   </style>
 </head>
 <body>
 
-<!-- Top nav -->
 <header class="preview-banner header" role="banner">
   <a href="#" class="pb-logo">andy<em>·</em>café</a>
   <nav>
     <a href="#cafes">Cafés</a>
     <a href="#histoire">Histoire</a>
     <a href="#collections">Collections</a>
-    <a href="#contact">Contact</a>
+    <a href="#nl">Lettre</a>
   </nav>
   <a href="#nl" class="pb-cta lux-magnetic">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/>
-    </svg>
     FR · CAD
   </a>
 </header>
 
-<!-- HERO -->
+<!-- HERO 01 -->
 <section class="ac-hero">
   <div class="ac-hero-bg" data-parallax="0.18"
        style="background:
-         radial-gradient(ellipse at 30% 20%, rgba(201,169,97,0.18), transparent 55%),
-         radial-gradient(ellipse at 75% 85%, rgba(185,124,90,0.22), transparent 50%),
-         linear-gradient(160deg, #0a0807 0%, #14110e 35%, #1c1814 70%, #0a0807 100%);
-         background-size: cover;"></div>
+         radial-gradient(ellipse at 22% 18%, rgba(201,163,90,0.18), transparent 50%),
+         radial-gradient(ellipse at 78% 82%, rgba(90,28,28,0.28), transparent 55%),
+         radial-gradient(ellipse at 50% 50%, rgba(185,124,90,0.10), transparent 70%),
+         linear-gradient(160deg, #07060a 0%, #0d0a08 30%, #1c1814 65%, #07060a 100%);"></div>
   <div class="ac-hero-overlay"></div>
   <div class="ac-hero-vignette"></div>
+  <div class="ac-hero-ornament" aria-hidden="true">a</div>
+  <div class="ac-hero-index">01 — Le Cabinet</div>
+
   <div class="ac-hero-content">
     <span class="ac-hero-tag">Torréfacteur Artisan · Québec</span>
     <h1>L'art du <em>café</em><br>réinventé</h1>
@@ -113,33 +120,34 @@
 <!-- MARQUEE -->
 <div class="ac-marquee-wrap">
   <div class="ac-marquee-track">
-    <span class="ac-marquee-item"><span class="ac-marquee-dot"></span>Torréfié au Québec</span>
-    <span class="ac-marquee-item is-outlined"><span class="ac-marquee-dot"></span>Origines rares</span>
-    <span class="ac-marquee-item"><span class="ac-marquee-dot"></span>Petits lots artisanaux</span>
-    <span class="ac-marquee-item is-outlined"><span class="ac-marquee-dot"></span>Livraison gratuite 50$+</span>
-    <span class="ac-marquee-item"><span class="ac-marquee-dot"></span>Fraîcheur signature</span>
-    <span class="ac-marquee-item"><span class="ac-marquee-dot"></span>Torréfié au Québec</span>
-    <span class="ac-marquee-item is-outlined"><span class="ac-marquee-dot"></span>Origines rares</span>
-    <span class="ac-marquee-item"><span class="ac-marquee-dot"></span>Petits lots artisanaux</span>
-    <span class="ac-marquee-item is-outlined"><span class="ac-marquee-dot"></span>Livraison gratuite 50$+</span>
-    <span class="ac-marquee-item"><span class="ac-marquee-dot"></span>Fraîcheur signature</span>
+    <span class="ac-marquee-item">Torréfié au Québec<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item is-outlined">Origines rares<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item">Petits lots artisanaux<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item is-outlined">Livraison gratuite 50$+<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item">Fraîcheur signature<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item">Torréfié au Québec<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item is-outlined">Origines rares<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item">Petits lots artisanaux<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item is-outlined">Livraison gratuite 50$+<span class="ac-marquee-dot"></span></span>
+    <span class="ac-marquee-item">Fraîcheur signature<span class="ac-marquee-dot"></span></span>
   </div>
 </div>
 
-<!-- STORY -->
+<!-- STORY 02 -->
 <section class="ac-story-section" id="histoire">
   <div class="ac-story-inner">
     <div class="ac-story-visual lux-reveal-mask">
       <div style="position:absolute; inset:0; background:
         radial-gradient(circle at 30% 30%, #b97c5a 0%, #1c1814 60%),
-        linear-gradient(135deg, #1c1814, #0a0807);
+        linear-gradient(135deg, #1c1814, #07060a);
         background-blend-mode: multiply;"></div>
       <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
         <div class="ac-story-ring"></div>
       </div>
     </div>
     <div class="ac-story-content">
-      <span class="ac-story-tag lux-reveal">Notre Histoire</span>
+      <span class="lux-index lux-reveal">02 — Histoire</span>
+      <span class="ac-story-tag lux-reveal">Notre Atelier</span>
       <h2 class="lux-reveal-up">L'obsession<br>du grain <em>parfait</em></h2>
       <p class="lux-reveal">Nous sourçons des fèves rares, torréfiées en petits lots dans notre torréfacteur artisanal au cœur du Québec.</p>
       <p class="lux-reveal">Chaque cuvée est l'aboutissement d'une rencontre entre un terroir, un torréfacteur, et une tasse.</p>
@@ -167,20 +175,22 @@
   </div>
 </section>
 
-<!-- COLLECTIONS -->
+<!-- COLLECTIONS 03 -->
 <section class="ac-collections-strip" id="collections">
   <div class="ac-section-inner">
     <div class="ac-section-header">
+      <span class="lux-index lux-reveal">03 — Univers</span>
       <div>
         <span class="lux-eyebrow lux-reveal">L'univers Andy</span>
-        <h2 class="lux-reveal-up" style="margin-top:8px;">Nos <em>collections</em></h2>
+        <h2 class="lux-reveal-up" style="margin-top:12px;">Nos <em>collections</em></h2>
       </div>
       <a href="#" class="ac-view-all lux-reveal">Toutes les collections</a>
     </div>
     <div class="ac-collections-grid lux-stagger-parent">
-      <a href="#" class="ac-collection-card lux-stagger-child">
-        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #2c1a0e, #5d2b09 60%, #b97c5a);"></div>
+      <a href="#" class="ac-collection-card lux-stagger-child lux-tilt">
+        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #2c1a0e, #5a1c1c 60%, #b97c5a);"></div>
         <div class="ac-coll-overlay"></div>
+        <span class="ac-coll-num">01</span>
         <div class="ac-coll-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
@@ -188,38 +198,41 @@
         </div>
         <div class="ac-coll-content">
           <h3>Origines uniques</h3>
-          <p>Single origin</p>
+          <p>Single origin · Cuvées rares</p>
         </div>
       </a>
-      <a href="#" class="ac-collection-card lux-stagger-child">
-        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #28221c, #14110e 60%, #1c1814);"></div>
+      <a href="#" class="ac-collection-card lux-stagger-child lux-tilt">
+        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #2a2520, #14110e 60%, #1c1814);"></div>
         <div class="ac-coll-overlay"></div>
+        <span class="ac-coll-num">02</span>
         <div class="ac-coll-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
           </svg>
         </div>
         <div class="ac-coll-content">
-          <h3>Mélanges signature</h3>
+          <h3>Mélanges</h3>
           <p>Notre maison</p>
         </div>
       </a>
-      <a href="#" class="ac-collection-card lux-stagger-child">
-        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #b97c5a, #5d2b09 50%, #1c1814);"></div>
+      <a href="#" class="ac-collection-card lux-stagger-child lux-tilt">
+        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #b97c5a, #5a1c1c 50%, #1c1814);"></div>
         <div class="ac-coll-overlay"></div>
+        <span class="ac-coll-num">03</span>
         <div class="ac-coll-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
           </svg>
         </div>
         <div class="ac-coll-content">
-          <h3>Édition limitée</h3>
-          <p>Cuvées rares</p>
+          <h3>Limitée</h3>
+          <p>Édition rare</p>
         </div>
       </a>
-      <a href="#" class="ac-collection-card lux-stagger-child">
-        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #14110e, #0a0807 60%, #28221c);"></div>
+      <a href="#" class="ac-collection-card lux-stagger-child lux-tilt">
+        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #14110e, #07060a 60%, #2a2520);"></div>
         <div class="ac-coll-overlay"></div>
+        <span class="ac-coll-num">04</span>
         <div class="ac-coll-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
@@ -230,69 +243,124 @@
           <p>Pour le rituel</p>
         </div>
       </a>
+      <a href="#" class="ac-collection-card lux-stagger-child lux-tilt">
+        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #8a3a1f, #2c1a0e 60%, #14110e);"></div>
+        <div class="ac-coll-overlay"></div>
+        <span class="ac-coll-num">05</span>
+        <div class="ac-coll-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </div>
+        <div class="ac-coll-content">
+          <h3>Décaféiné</h3>
+          <p>Sans compromis</p>
+        </div>
+      </a>
+      <a href="#" class="ac-collection-card lux-stagger-child lux-tilt">
+        <div class="ac-coll-bg" style="background: linear-gradient(160deg, #1c1814, #2a2520 60%, #07060a);"></div>
+        <div class="ac-coll-overlay"></div>
+        <span class="ac-coll-num">06</span>
+        <div class="ac-coll-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </div>
+        <div class="ac-coll-content">
+          <h3>Cadeau</h3>
+          <p>Coffrets signés</p>
+        </div>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- FEATURED PRODUCTS -->
+<!-- FEATURED PRODUCTS 04 -->
 <section class="ac-section" id="cafes">
   <div class="ac-section-inner">
     <div class="ac-section-header">
+      <span class="lux-index lux-reveal">04 — Cuvées</span>
       <div>
         <span class="lux-eyebrow lux-reveal">Sélection</span>
-        <h2 class="lux-reveal-up" style="margin-top:8px;">Cafés <em>signature</em></h2>
+        <h2 class="lux-reveal-up" style="margin-top:12px;">Cafés <em>signature</em></h2>
       </div>
       <a href="#" class="ac-view-all lux-reveal">Voir tous les cafés</a>
     </div>
-    <div class="ac-product-grid lux-stagger-parent">
-      <a href="#" class="ac-product-card lux-stagger-child">
-        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #b97c5a, #14110e 75%);"></div>
+    <div class="ac-product-grid is-editorial lux-stagger-parent">
+      <a href="#" class="ac-product-card lux-stagger-child lux-tilt">
+        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #b97c5a, #14110e 75%);">
+          <span class="ac-product-badge">Signature</span>
+        </div>
         <div class="ac-product-info">
           <div class="ac-product-origin">Éthiopie · Yirgacheffe</div>
           <div class="ac-product-name">Aurora</div>
-          <div class="ac-product-desc">Notes de jasmin, bergamote, miel d'acacia. Acidité éclatante.</div>
+          <div class="ac-product-desc">Notes de jasmin, bergamote, miel d'acacia. Acidité éclatante, finale soyeuse.</div>
           <div class="ac-product-footer">
-            <span class="ac-product-price">28 <span class="cur">CAD</span></span>
+            <span class="ac-product-price">28<span class="cur">CAD</span></span>
             <button class="ac-add-btn" type="button">+</button>
           </div>
         </div>
       </a>
-      <a href="#" class="ac-product-card lux-stagger-child">
-        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #c9a961, #1c1814 75%);">
+      <a href="#" class="ac-product-card lux-stagger-child lux-tilt">
+        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #c9a35a, #1c1814 75%);">
           <span class="ac-product-badge">Édition</span>
         </div>
         <div class="ac-product-info">
           <div class="ac-product-origin">Colombie · Huila</div>
           <div class="ac-product-name">Selvatica</div>
-          <div class="ac-product-desc">Cacao noir, prune, finale longue de noisette grillée.</div>
+          <div class="ac-product-desc">Cacao noir, prune.</div>
           <div class="ac-product-footer">
-            <span class="ac-product-price">32 <span class="cur">CAD</span></span>
+            <span class="ac-product-price">32<span class="cur">CAD</span></span>
             <button class="ac-add-btn" type="button">+</button>
           </div>
         </div>
       </a>
-      <a href="#" class="ac-product-card lux-stagger-child">
-        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #d4a594, #0a0807 75%);"></div>
+      <a href="#" class="ac-product-card lux-stagger-child lux-tilt">
+        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #8a3a1f, #07060a 75%);"></div>
         <div class="ac-product-info">
           <div class="ac-product-origin">Kenya · Nyeri</div>
           <div class="ac-product-name">Cinder</div>
-          <div class="ac-product-desc">Cassis, vin rouge, sucre brûlé. Corps soyeux.</div>
+          <div class="ac-product-desc">Cassis, vin rouge.</div>
           <div class="ac-product-footer">
-            <span class="ac-product-price">30 <span class="cur">CAD</span></span>
+            <span class="ac-product-price">30<span class="cur">CAD</span></span>
             <button class="ac-add-btn" type="button">+</button>
           </div>
         </div>
       </a>
-      <a href="#" class="ac-product-card lux-stagger-child">
-        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #b97c5a, #28221c 75%);">
+      <a href="#" class="ac-product-card lux-stagger-child lux-tilt">
+        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #5a1c1c, #14110e 75%);"></div>
+        <div class="ac-product-info">
+          <div class="ac-product-origin">Maison</div>
+          <div class="ac-product-name">Manifeste</div>
+          <div class="ac-product-desc">Notre signature. Équilibre absolu, douceur, persistance.</div>
+          <div class="ac-product-footer">
+            <span class="ac-product-price">26<span class="cur">CAD</span></span>
+            <button class="ac-add-btn" type="button">+</button>
+          </div>
+        </div>
+      </a>
+      <a href="#" class="ac-product-card lux-stagger-child lux-tilt">
+        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #d4a594, #1c1814 75%);">
           <span class="ac-product-badge">Nouveau</span>
         </div>
         <div class="ac-product-info">
-          <div class="ac-product-origin">Maison · Mélange</div>
-          <div class="ac-product-name">Le Manifeste</div>
-          <div class="ac-product-desc">Notre signature. Équilibre absolu, douceur, persistance.</div>
+          <div class="ac-product-origin">Brésil · Cerrado</div>
+          <div class="ac-product-name">Penumbra</div>
+          <div class="ac-product-desc">Chocolat lait, noisette, sucre roux.</div>
           <div class="ac-product-footer">
-            <span class="ac-product-price">26 <span class="cur">CAD</span></span>
+            <span class="ac-product-price">24<span class="cur">CAD</span></span>
+            <button class="ac-add-btn" type="button">+</button>
+          </div>
+        </div>
+      </a>
+      <a href="#" class="ac-product-card lux-stagger-child lux-tilt">
+        <div class="ac-product-card-img" style="background: radial-gradient(circle at 50% 35%, #b97c5a, #2c1a0e 75%);"></div>
+        <div class="ac-product-info">
+          <div class="ac-product-origin">Costa Rica · Tarrazú</div>
+          <div class="ac-product-name">Solivagant</div>
+          <div class="ac-product-desc">Caramel, agrume, finale longue.</div>
+          <div class="ac-product-footer">
+            <span class="ac-product-price">29<span class="cur">CAD</span></span>
             <button class="ac-add-btn" type="button">+</button>
           </div>
         </div>
@@ -309,19 +377,20 @@
   </blockquote>
 </section>
 
-<!-- REVIEWS -->
+<!-- REVIEWS 05 -->
 <section class="ac-section">
   <div class="ac-section-inner">
     <div class="ac-section-header centered">
+      <span class="lux-index lux-reveal">05 — Témoignages</span>
       <span class="lux-eyebrow lux-reveal">Voix des amateurs</span>
-      <h2 class="lux-reveal-up" style="margin-top:8px;">Une signature qui se <em>transmet</em></h2>
+      <h2 class="lux-reveal-up" style="margin-top:12px;">Une signature qui se <em>transmet</em></h2>
     </div>
     <div class="ac-reviews-grid lux-stagger-parent">
       <article class="ac-review-card lux-stagger-child">
         <div class="ac-review-stars">★★★★★</div>
-        <blockquote>Une expérience sensorielle complète. La cuvée Éthiopie est une révélation.</blockquote>
+        <blockquote>Une expérience sensorielle complète. La cuvée Éthiopie est une révélation absolue.</blockquote>
         <div class="ac-review-author">
-          <div class="ac-review-avatar">ML</div>
+          <div class="ac-review-avatar">M</div>
           <div class="ac-review-author-info">
             <h4>Marie Lavoie</h4>
             <p>Montréal</p>
@@ -332,7 +401,7 @@
         <div class="ac-review-stars">★★★★★</div>
         <blockquote>Depuis Andy Café, je ne peux plus revenir en arrière. Le standard est ailleurs.</blockquote>
         <div class="ac-review-author">
-          <div class="ac-review-avatar">JR</div>
+          <div class="ac-review-avatar">J</div>
           <div class="ac-review-author-info">
             <h4>Jean-Pierre Roy</h4>
             <p>Québec</p>
@@ -343,7 +412,7 @@
         <div class="ac-review-stars">★★★★★</div>
         <blockquote>L'abonnement a transformé mes matins en rituel. Chaque livraison, une découverte.</blockquote>
         <div class="ac-review-author">
-          <div class="ac-review-avatar">SM</div>
+          <div class="ac-review-avatar">S</div>
           <div class="ac-review-author-info">
             <h4>Sophie Martin</h4>
             <p>Sherbrooke</p>
@@ -354,22 +423,27 @@
   </div>
 </section>
 
-<!-- NEWSLETTER -->
+<!-- NEWSLETTER 06 -->
 <section class="ac-signup-section" id="nl">
   <div class="ac-signup-inner">
-    <span class="lux-eyebrow lux-reveal">Lettre confidentielle</span>
-    <h2 class="lux-reveal-up">Le café qui se <em>savoure d'abord</em></h2>
-    <p class="lux-reveal">Cuvées exclusives, accès anticipé, rituels de dégustation. Une lettre par mois, jamais plus.</p>
-    <form class="ac-signup-form lux-reveal" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Bienvenue ✦';">
-      <input type="email" placeholder="votre@adresse.com" required>
-      <button type="submit" class="lux-magnetic">S'abonner</button>
-    </form>
-    <p class="ac-signup-fineprint lux-reveal">Désinscription en un clic. Pas de spam, jamais.</p>
+    <div class="ac-signup-copy">
+      <span class="lux-index lux-reveal">06 — Lettre</span>
+      <span class="lux-eyebrow lux-reveal">Lettre confidentielle</span>
+      <h2 class="lux-reveal-up">Le café qui<br>se <em>savoure d'abord</em></h2>
+      <p class="lux-reveal">Cuvées exclusives, accès anticipé, rituels de dégustation. Une lettre par mois, jamais plus.</p>
+    </div>
+    <div class="ac-signup-form-wrap">
+      <form class="ac-signup-form lux-reveal" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Bienvenue';">
+        <input type="email" placeholder="votre@adresse.com" required>
+        <button type="submit" class="lux-magnetic">S'abonner</button>
+      </form>
+      <p class="ac-signup-fineprint lux-reveal">Désinscription en un clic. Pas de spam, jamais.</p>
+    </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="ac-footer" id="contact">
+<footer class="ac-footer">
   <div class="ac-footer-inner">
     <div class="ac-footer-brand">
       <div class="logo">andy<span>·</span>café</div>
@@ -389,7 +463,6 @@
       <a href="#">Le torréfacteur</a>
       <a href="#">Engagements</a>
       <a href="#">Carrières</a>
-      <a href="#">Presse</a>
     </div>
     <div class="ac-footer-col">
       <h4>Service</h4>
@@ -397,7 +470,6 @@
       <a href="#">Retours</a>
       <a href="#">Abonnement</a>
       <a href="#">Contact</a>
-      <a href="#">FAQ</a>
     </div>
   </div>
   <div class="ac-footer-bottom">
