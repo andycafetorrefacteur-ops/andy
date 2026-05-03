@@ -37,6 +37,15 @@ Captures du rendu généré depuis `preview/index.html` via Chromium headless.
 ### 04 — Cuvées (grille éditoriale alternant 1 large + 2 small)
 ![Products](screenshots/desktop-05-products.jpg)
 
+### Méthode (cream-light contrast — iv étapes)
+![Méthode](screenshots/desktop-05b-methode.jpg)
+
+### Cuvée du moment (oxblood color punch)
+![Band](screenshots/desktop-05c-band.jpg)
+
+### 06 — Engagements (bento mixed grid)
+![Bento](screenshots/desktop-05d-bento.jpg)
+
 ### Quote band (guillemet géant ornement)
 ![Quote](screenshots/desktop-06-quote.jpg)
 

@@ -591,19 +591,65 @@ nav a {
 /* Decorative oversized italic letter — sits behind */
 .ac-hero-ornament {
   position: absolute;
-  right: -4vw;
-  top: 8vh;
+  right: -8vw;
+  top: 4vh;
   font-family: var(--ac-font-display);
   font-style: italic;
   font-weight: 400;
   font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
-  font-size: clamp(28rem, 50vw, 64rem);
+  font-size: clamp(36rem, 64vw, 88rem);
   line-height: 0.78;
   color: var(--ac-gold);
-  opacity: 0.07;
+  opacity: 0.14;
   pointer-events: none;
   z-index: 0;
   user-select: none;
+  filter: blur(1px);
+}
+
+/* GIANT roman numeral marker — top-right of hero */
+.ac-hero-marker {
+  position: absolute;
+  top: clamp(80px, 12vh, 140px);
+  right: max(40px, 6vw);
+  z-index: 2;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.ac-hero-marker .num {
+  font-family: var(--ac-font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(6rem, 12vw, 12rem);
+  line-height: 0.85;
+  color: var(--ac-gold);
+  letter-spacing: -0.04em;
+}
+
+.ac-hero-marker .num em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  color: var(--ac-gold-bright);
+}
+
+.ac-hero-marker .label {
+  font-family: var(--ac-font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ac-stone);
+}
+
+@media (max-width: 768px) {
+  .ac-hero-marker { top: 88px; right: 24px; }
+  .ac-hero-marker .num { font-size: 4.4rem; }
+  .ac-hero-marker .label { font-size: 0.6rem; letter-spacing: 0.32em; }
 }
 
 .ac-hero-content {
@@ -1200,6 +1246,115 @@ nav a {
   letter-spacing: 0.4em;
   color: var(--ac-gold);
   z-index: 2;
+}
+
+/* ============================================================
+   14b. METHODE — cream-light contrast section (4 steps)
+   ============================================================ */
+.ac-methode {
+  background: var(--ac-ivory);
+  color: #1a120c;
+  padding: clamp(96px, 14vw, 168px) var(--ac-page-px);
+  position: relative;
+  overflow: hidden;
+}
+
+.ac-methode::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  opacity: 0.08;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.ac-methode-inner {
+  max-width: var(--ac-container);
+  margin: 0 auto;
+  position: relative;
+}
+
+.ac-methode-header {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: end;
+  margin-bottom: clamp(64px, 8vw, 96px);
+}
+
+@media (max-width: 768px) {
+  .ac-methode-header { grid-template-columns: 1fr; gap: 24px; }
+}
+
+.ac-methode-header .lux-index {
+  color: var(--ac-gold-deep);
+  align-self: end;
+}
+.ac-methode-header .lux-index::after { background: var(--ac-gold-deep); }
+
+.ac-methode-header h2 {
+  color: #0d0805;
+  font-family: var(--ac-font-display);
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+.ac-methode-header h2 em {
+  color: var(--ac-gold-deep);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+}
+
+.ac-methode-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(20px, 2vw, 32px);
+}
+
+@media (max-width: 1024px) { .ac-methode-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px) { .ac-methode-grid { grid-template-columns: 1fr; } }
+
+.ac-methode-step {
+  position: relative;
+  padding: 36px 28px 32px;
+  border-top: 1px solid rgba(13, 8, 5, 0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ac-methode-step .step-num {
+  font-family: var(--ac-font-display);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  font-size: 3.6rem;
+  font-weight: 400;
+  line-height: 0.85;
+  color: var(--ac-gold-deep);
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.ac-methode-step h3 {
+  font-family: var(--ac-font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #0d0805;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.ac-methode-step p {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: #4a3a2a;
+  margin: 0;
 }
 
 /* ============================================================
@@ -1960,6 +2115,304 @@ select:focus-visible {
   box-shadow:
     inset 0 1px 0 rgba(245, 235, 214, 0.12),
     0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+/* ============================================================
+   24b. STICKY VERTICAL BRAND MARK — runs along left edge
+   ============================================================ */
+.lux-brand-mark {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+  z-index: 50;
+  font-family: var(--ac-font-body);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--ac-mist);
+  pointer-events: none;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  mix-blend-mode: difference;
+}
+
+.lux-brand-mark::before {
+  content: "";
+  width: 36px;
+  height: 1px;
+  background: var(--ac-gold);
+  opacity: 0.6;
+}
+
+@media (max-width: 900px) { .lux-brand-mark { display: none; } }
+
+/* ============================================================
+   24c. OXBLOOD COLOR BAND — punch contrast section
+   ============================================================ */
+.ac-band {
+  background: linear-gradient(135deg, var(--ac-oxblood) 0%, #2c0e0e 60%, var(--ac-oxblood) 100%);
+  color: var(--ac-pearl);
+  padding: clamp(64px, 9vw, 112px) var(--ac-page-px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ac-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+}
+
+.ac-band-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.ac-band-eyebrow {
+  font-family: var(--ac-font-body);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ac-gold-bright);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ac-band-eyebrow::before, .ac-band-eyebrow::after {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--ac-gold-bright);
+}
+
+.ac-band h2 {
+  font-family: var(--ac-font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 80;
+  font-style: italic;
+  font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+  font-weight: 400;
+  color: var(--ac-pearl);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 0;
+  max-width: 880px;
+  text-wrap: balance;
+}
+
+.ac-band p {
+  font-size: 1rem;
+  color: var(--ac-rose);
+  max-width: 560px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.ac-band a {
+  margin-top: 8px;
+}
+
+/* ============================================================
+   24d. ENGAGEMENTS BENTO — mixed-size grid
+   ============================================================ */
+.ac-bento {
+  background: var(--ac-coal);
+  padding: clamp(80px, 12vw, 144px) var(--ac-page-px);
+  position: relative;
+}
+
+.ac-bento-inner {
+  max-width: var(--ac-container);
+  margin: 0 auto;
+}
+
+.ac-bento-header {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: clamp(24px, 4vw, 64px);
+  align-items: end;
+  margin-bottom: clamp(48px, 6vw, 80px);
+}
+
+@media (max-width: 768px) { .ac-bento-header { grid-template-columns: 1fr; } }
+
+.ac-bento-header h2 {
+  margin: 0;
+  font-family: var(--ac-font-display);
+  font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
+  color: var(--ac-cream);
+}
+
+.ac-bento-header h2 em {
+  color: var(--ac-gold);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+}
+
+.ac-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(180px, auto);
+  gap: 16px;
+}
+
+.ac-bento-cell {
+  position: relative;
+  background: var(--ac-cocoa);
+  border: 1px solid var(--ac-smoke);
+  border-radius: var(--ac-radius-lg);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  overflow: hidden;
+  transition: border-color 0.5s var(--ac-ease), transform 0.5s var(--ac-ease), background 0.5s var(--ac-ease);
+}
+
+.ac-bento-cell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 0% 0%, rgba(201, 163, 90, 0.06), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.6s var(--ac-ease);
+  pointer-events: none;
+}
+
+.ac-bento-cell:hover {
+  border-color: rgba(201, 163, 90, 0.4);
+  transform: translateY(-4px);
+}
+
+.ac-bento-cell:hover::before { opacity: 1; }
+
+.ac-bento-cell.is-feature {
+  grid-column: span 6;
+  grid-row: span 2;
+  background: linear-gradient(140deg, var(--ac-cocoa) 0%, var(--ac-ink) 100%);
+  padding: 44px 40px 40px;
+}
+
+.ac-bento-cell.is-medium { grid-column: span 6; }
+.ac-bento-cell.is-small  { grid-column: span 3; }
+.ac-bento-cell.is-wide   { grid-column: span 6; }
+.ac-bento-cell.is-tall   { grid-column: span 3; grid-row: span 2; }
+
+.ac-bento-cell.is-accent {
+  background: linear-gradient(140deg, var(--ac-oxblood) 0%, #2a0a0a 100%);
+  border-color: rgba(212, 165, 148, 0.25);
+}
+
+.ac-bento-cell.is-accent .bento-num,
+.ac-bento-cell.is-accent .bento-label { color: var(--ac-gold-bright); }
+.ac-bento-cell.is-accent h3 { color: var(--ac-pearl); }
+.ac-bento-cell.is-accent p { color: var(--ac-rose); }
+
+@media (max-width: 1024px) {
+  .ac-bento-grid { grid-auto-rows: auto; }
+  .ac-bento-cell.is-feature { grid-column: span 12; grid-row: auto; }
+  .ac-bento-cell.is-medium  { grid-column: span 12; }
+  .ac-bento-cell.is-small   { grid-column: span 6; }
+  .ac-bento-cell.is-wide    { grid-column: span 12; }
+  .ac-bento-cell.is-tall    { grid-column: span 6; grid-row: auto; }
+}
+
+@media (max-width: 540px) {
+  .ac-bento-cell { grid-column: span 12 !important; }
+}
+
+.ac-bento-cell .bento-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(201, 163, 90, 0.4);
+  background: rgba(201, 163, 90, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ac-gold);
+}
+
+.ac-bento-cell .bento-num {
+  font-family: var(--ac-font-mono, var(--ac-font-body));
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: var(--ac-gold);
+}
+
+.ac-bento-cell h3 {
+  font-family: var(--ac-font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--ac-cream);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.ac-bento-cell.is-feature h3 {
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  letter-spacing: -0.025em;
+}
+
+.ac-bento-cell h3 em {
+  color: var(--ac-gold);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+}
+
+.ac-bento-cell p {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--ac-stone);
+  margin: 0;
+}
+
+.ac-bento-cell .bento-label {
+  font-family: var(--ac-font-body);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ac-gold);
+}
+
+.ac-bento-cell .bento-figure {
+  font-family: var(--ac-font-display);
+  font-variation-settings: "opsz" 144;
+  font-size: clamp(3rem, 6vw, 4.6rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  color: var(--ac-cream);
+  line-height: 0.85;
+}
+
+.ac-bento-cell .bento-figure em {
+  color: var(--ac-gold);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
 }
 
 /* ============================================================
