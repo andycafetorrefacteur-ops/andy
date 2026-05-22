@@ -32,11 +32,11 @@ IS_WINDOWS = platform.system() == "Windows"
 def ensure_deps():
     import importlib.util
     needed = {
-        "reportlab": "reportlab",
-        "pypdf": "pypdf",
-        "PIL": "pillow",
+        "reportlab":  "reportlab",
+        "pypdf":      "pypdf",
+        "PIL":        "pillow",
         "tkcalendar": "tkcalendar",
-        "pdf2image": "pdf2image",
+        "pypdfium2":  "pypdfium2",
     }
     missing = [pkg for mod, pkg in needed.items() if importlib.util.find_spec(mod) is None]
     if not missing:
@@ -162,7 +162,6 @@ DEFAULT_CFG = {
     "fields_per_cafe": {cafe: get_default_fields(cafe) for cafe in CAFES_SPECIAL},
     "print_delay":     0,
     "scale_pct":       100,
-    "poppler_path":    "",
 }
 
 _candidate_dirs = [
@@ -214,7 +213,6 @@ def load_cfg():
             data.setdefault("print_delay",     0)
             data.setdefault("scale_pct",       100)
             data.setdefault("fields_per_cafe", {})
-            data.setdefault("poppler_path",    "")
             for c in CAFES:
                 data["templates"].setdefault(c, "")
             for fk, fv in DEFAULT_FIELDS.items():
@@ -375,20 +373,22 @@ def generate_preview_image(cfg, cafe, fmt, niveau, torr_date):
     tmp_pdf.close()
     try:
         generate_label(cfg, cafe, fmt, niveau, torr_date, copies=1, scale=1.0, out_path=tmp_pdf.name)
+        # pypdfium2 = moteur PDF embarqué, aucun binaire externe à installer
         try:
-            from pdf2image import convert_from_path
-            poppler = cfg.get("poppler_path") or None
-            kwargs = {"dpi": 160, "first_page": 1, "last_page": 1}
-            if poppler:
-                kwargs["poppler_path"] = poppler
-            imgs = convert_from_path(tmp_pdf.name, **kwargs)
-            return imgs[0]
+            import pypdfium2 as pdfium
+            pdf = pdfium.PdfDocument(tmp_pdf.name)
+            page = pdf[0]
+            # scale=2.2 → ~160 DPI sur une page de label standard
+            pil = page.render(scale=2.2).to_pil()
+            page.close()
+            pdf.close()
+            return pil
         except Exception as e:
             from PIL import ImageDraw
             img = Image.new("RGB", (280, 212), color="#f5ece0")
             d = ImageDraw.Draw(img)
             d.text((15, 80),
-                   f"Aperçu non disponible\n(installer poppler)\n\n{type(e).__name__}",
+                   f"Aperçu indisponible\n{type(e).__name__}: {e}",
                    fill="#888")
             return img
     finally:
