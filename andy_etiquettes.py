@@ -158,6 +158,7 @@ DEFAULT_FIELDS = FIELDS_STANDARD
 DEFAULT_CFG = {
     "templates":       {cafe: "" for cafe in CAFES},
     "output_dir":      os.path.join(os.path.expanduser("~"), "Desktop", "Etiquettes_Andy"),
+    "queue_dir":       os.path.join(os.path.expanduser("~"), "Dropbox", "Andy_Print_Queue"),
     "fields":          copy.deepcopy(DEFAULT_FIELDS),
     "fields_per_cafe": {cafe: get_default_fields(cafe) for cafe in CAFES_SPECIAL},
     "print_delay":     0,
@@ -209,6 +210,7 @@ def load_cfg():
                 data["templates"]["Mélange Andy"] = old_path
             data.setdefault("templates",       copy.deepcopy(DEFAULT_CFG["templates"]))
             data.setdefault("output_dir",      DEFAULT_CFG["output_dir"])
+            data.setdefault("queue_dir",       DEFAULT_CFG["queue_dir"])
             data.setdefault("fields",          copy.deepcopy(DEFAULT_FIELDS))
             data.setdefault("print_delay",     0)
             data.setdefault("scale_pct",       100)
@@ -396,6 +398,22 @@ def generate_preview_image(cfg, cafe, fmt, niveau, torr_date):
             os.unlink(tmp_pdf.name)
         except OSError:
             pass
+
+
+def send_to_queue(cfg, cafe, fmt, niveau, torr_date, copies=1, scale=1.0):
+    """Génère le PDF directement dans le dossier file d'attente (Dropbox/OneDrive)."""
+    queue_dir = cfg.get("queue_dir") or ""
+    if not queue_dir:
+        raise RuntimeError("Dossier file d'attente non configuré — va dans ⚙️ Config.")
+    os.makedirs(queue_dir, exist_ok=True)
+    # Préfixe horodaté pour ordre chronologique + nom unique
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+    safe = (cafe.replace(" ", "_").replace("/", "-").replace("—", "")
+                .encode("ascii", "ignore").decode().strip("_"))
+    name = f"{ts}__{safe}_{fmt}_x{copies}.pdf"
+    out_path = os.path.join(queue_dir, name)
+    return generate_label(cfg, cafe, fmt, niveau, torr_date, copies=copies,
+                          scale=scale, out_path=out_path)
 
 
 def open_or_print(path, do_print=False):
@@ -610,7 +628,11 @@ class EtiquetteApp(tk.Tk):
         tk.Button(br, text="🖨️  Imprimer", command=self.do_print,
                   bg=C_GREEN, fg=C_WHITE, font=("Segoe UI", 11, "bold"),
                   padx=10, pady=9, relief="flat", cursor="hand2",
-                  activebackground="#1a5c38").pack(side="left")
+                  activebackground="#1a5c38").pack(side="left", padx=(0, 6))
+        tk.Button(br, text="📡  Envoyer au café", command=self.do_send_to_queue,
+                  bg=C_GOLD, fg=C_WHITE, font=("Segoe UI", 11, "bold"),
+                  padx=10, pady=9, relief="flat", cursor="hand2",
+                  activebackground="#a07020").pack(side="left")
 
         self.status_var = tk.StringVar(value="Prêt.")
         tk.Label(p, textvariable=self.status_var, font=("Segoe UI", 9, "italic"),
@@ -770,7 +792,11 @@ class EtiquetteApp(tk.Tk):
         tk.Button(act, text="🖨️  Imprimer tout", command=lambda: self._do_batch(True),
                   bg=C_GREEN, fg=C_WHITE, font=("Segoe UI", 11, "bold"),
                   padx=14, pady=9, relief="flat", cursor="hand2",
-                  activebackground="#1a5c38").pack(side="left")
+                  activebackground="#1a5c38").pack(side="left", padx=(0, 8))
+        tk.Button(act, text="📡  Envoyer tout au café", command=self._do_batch_send,
+                  bg=C_GOLD, fg=C_WHITE, font=("Segoe UI", 11, "bold"),
+                  padx=14, pady=9, relief="flat", cursor="hand2",
+                  activebackground="#a07020").pack(side="left")
 
         self.batch_progress = ttk.Progressbar(p, orient="horizontal", mode="determinate",
                                               length=560, style="green.Horizontal.TProgressbar")
@@ -857,6 +883,14 @@ class EtiquetteApp(tk.Tk):
         self.var_outdir = tk.StringVar(value=self.cfg.get("output_dir", ""))
         ttk.Entry(sf, textvariable=self.var_outdir, width=32).grid(row=r, column=0, columnspan=3, sticky="ew", padx=(0, 4))
         tk.Button(sf, text="📂", command=self._browse_outdir,
+                  bg=C_LIGHT, fg=C_BROWN2, relief="flat", padx=6, cursor="hand2").grid(row=r, column=3)
+        r += 1
+
+        self._lbl(sf, "📡  File d'attente du café (dossier synchronisé Dropbox/OneDrive)",
+                  bold=True, size=11).grid(row=r, column=0, columnspan=4, sticky="w", pady=(8, 4)); r += 1
+        self.var_queuedir = tk.StringVar(value=self.cfg.get("queue_dir", ""))
+        ttk.Entry(sf, textvariable=self.var_queuedir, width=32).grid(row=r, column=0, columnspan=3, sticky="ew", padx=(0, 4))
+        tk.Button(sf, text="📂", command=self._browse_queuedir,
                   bg=C_LIGHT, fg=C_BROWN2, relief="flat", padx=6, cursor="hand2").grid(row=r, column=3)
         r += 1
 
@@ -981,6 +1015,11 @@ class EtiquetteApp(tk.Tk):
         if path:
             self.var_outdir.set(path)
 
+    def _browse_queuedir(self):
+        path = filedialog.askdirectory(title="Dossier file d'attente du café (synchronisé)")
+        if path:
+            self.var_queuedir.set(path)
+
     def _browse_scan_dir(self):
         path = filedialog.askdirectory(title="Dossier contenant les PDFs")
         if path:
@@ -1058,6 +1097,7 @@ class EtiquetteApp(tk.Tk):
 
     def _save_cfg(self):
         self.cfg["output_dir"] = self.var_outdir.get()
+        self.cfg["queue_dir"]  = self.var_queuedir.get()
         self.cfg.setdefault("templates", {})
         for cafe, var in self.tmpl_vars.items():
             self.cfg["templates"][cafe] = var.get()
@@ -1212,6 +1252,27 @@ class EtiquetteApp(tk.Tk):
             self.status_var.set("✗  Erreur")
             messagebox.showerror("Erreur", str(e), parent=self)
 
+    def do_send_to_queue(self):
+        self.status_var.set("⏳  Envoi au café…")
+        self.update()
+        try:
+            torr_date = self.date_entry.get_date().strftime("%Y-%m-%d")
+            scale = self.var_scale.get() / 100.0
+            path = send_to_queue(self.cfg, self.var_cafe.get(), self.var_format.get(),
+                                 self.var_niveau.get(), torr_date,
+                                 self.var_copies.get(), scale=scale)
+            self._log([{
+                "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                "cafe":     self.var_cafe.get(),
+                "format":   self.var_format.get(),
+                "copies":   self.var_copies.get(),
+                "niveau":   self.var_niveau.get() + "  📡",
+            }])
+            self.status_var.set(f"📡  Envoyé : {os.path.basename(path)}")
+        except Exception as e:
+            self.status_var.set("✗  Erreur")
+            messagebox.showerror("Erreur", str(e), parent=self)
+
     # ── Batch ────────────────────────────────────────────────────────────────
     def _batch_set_all(self, qty):
         for row in self.batch_rows:
@@ -1219,7 +1280,47 @@ class EtiquetteApp(tk.Tk):
                 if fmt != "Personnalisé":
                     var.set(qty)
 
-    def _do_batch(self, print_mode=False):
+    def _do_batch_send(self):
+        """Comme _do_batch mais dépose tout dans le dossier file d'attente."""
+        jobs = self._collect_batch_jobs()
+        if not jobs:
+            messagebox.showwarning("Aucune sélection", "Mets au moins 1 copie quelque part !", parent=self)
+            return
+        lines = "\n".join(f"  • {c}  {f}  ×{n}" for c, f, n in jobs)
+        total_etiq = sum(n for _, _, n in jobs)
+        if not messagebox.askyesno(
+            f"Envoyer au café — {len(jobs)} ligne(s)",
+            f"Envoyer ces {total_etiq} étiquette(s) à la file d'attente du café ?\n\n{lines}",
+            parent=self,
+        ):
+            return
+        torr_date = self.batch_date_entry.get_date().strftime("%Y-%m-%d")
+        errors, log_entries = [], []
+        self.batch_progress["maximum"] = len(jobs)
+        for i, (cafe, fmt, copies) in enumerate(jobs):
+            niveau = NIVEAUX_DEFAUT.get(cafe, NIVEAUX[2])
+            self.batch_status.set(f"📡  {i+1}/{len(jobs)} — {cafe} {fmt}…")
+            self.batch_progress["value"] = i
+            self.update()
+            try:
+                scale = self.var_scale.get() / 100.0
+                send_to_queue(self.cfg, cafe, fmt, niveau, torr_date, copies, scale=scale)
+                log_entries.append({
+                    "datetime": datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "cafe": cafe, "format": fmt, "copies": copies,
+                    "niveau": niveau + "  📡",
+                })
+            except Exception as e:
+                errors.append(f"{cafe} {fmt} : {e}")
+        self.batch_progress["value"] = len(jobs)
+        self._log(log_entries)
+        if errors:
+            self.batch_status.set(f"⚠️  {len(errors)} erreur(s)")
+            messagebox.showerror("Erreurs", "\n".join(errors), parent=self)
+        else:
+            self.batch_status.set(f"📡  {total_etiq} étiquette(s) envoyées au café !")
+
+    def _collect_batch_jobs(self):
         jobs = []
         for row in self.batch_rows:
             cafe = row["cafe"]
@@ -1238,7 +1339,10 @@ class EtiquetteApp(tk.Tk):
                 else:
                     real_fmt = fmt
                 jobs.append((cafe, real_fmt, copies))
+        return jobs
 
+    def _do_batch(self, print_mode=False):
+        jobs = self._collect_batch_jobs()
         if not jobs:
             messagebox.showwarning("Aucune sélection", "Mets au moins 1 copie quelque part !", parent=self)
             return
