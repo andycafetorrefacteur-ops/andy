@@ -161,6 +161,8 @@ DEFAULT_CFG = {
     "queue_dir":       os.path.join(os.path.expanduser("~"), "Dropbox", "Andy_Print_Queue"),
     "fields":          copy.deepcopy(DEFAULT_FIELDS),
     "fields_per_cafe": {cafe: get_default_fields(cafe) for cafe in CAFES_SPECIAL},
+    "niveaux":         list(NIVEAUX),
+    "niveaux_defaut":  dict(NIVEAUX_DEFAUT),
     "print_delay":     0,
     "scale_pct":       100,
 }
@@ -215,6 +217,8 @@ def load_cfg():
             data.setdefault("print_delay",     0)
             data.setdefault("scale_pct",       100)
             data.setdefault("fields_per_cafe", {})
+            data.setdefault("niveaux",        list(NIVEAUX))
+            data.setdefault("niveaux_defaut", dict(NIVEAUX_DEFAUT))
             for c in CAFES:
                 data["templates"].setdefault(c, "")
             for fk, fv in DEFAULT_FIELDS.items():
@@ -558,9 +562,13 @@ class EtiquetteApp(tk.Tk):
         self._refresh_fmt_btns()
 
         self._lbl(p, "🌡️  Niveau de torréfaction", bold=True).grid(row=5, column=0, columnspan=2, sticky="w", pady=(0, 4))
-        self.var_niveau = tk.StringVar(value=NIVEAUX_DEFAUT.get(CAFES[0], NIVEAUX[2]))
-        ttk.Combobox(p, textvariable=self.var_niveau, values=NIVEAUX, state="readonly",
-                     width=18, font=("Segoe UI", 11)).grid(row=6, column=0, sticky="w", pady=(0, 16))
+        self.var_niveau = tk.StringVar(value=self._default_niveau(CAFES[0]))
+        # Champ libre : tu peux choisir dans la liste OU taper ce que tu veux
+        self.niveau_cb = ttk.Combobox(p, textvariable=self.var_niveau,
+                                       values=self.cfg.get("niveaux", NIVEAUX),
+                                       state="normal",
+                                       width=18, font=("Segoe UI", 11))
+        self.niveau_cb.grid(row=6, column=0, sticky="w", pady=(0, 16))
 
         self._lbl(p, "📅  Date de torréfaction", bold=True).grid(row=7, column=0, columnspan=2, sticky="w", pady=(0, 4))
         dr = tk.Frame(p, bg=C_CREAM)
@@ -896,6 +904,36 @@ class EtiquetteApp(tk.Tk):
 
         ttk.Separator(sf, orient="horizontal").grid(row=r, column=0, columnspan=4, sticky="ew", pady=(8, 8)); r += 1
 
+        # ── Niveaux de torréfaction ──
+        self._lbl(sf, "🌡️  Niveaux de torréfaction", bold=True, size=11).grid(
+            row=r, column=0, columnspan=4, sticky="w"); r += 1
+        self._lbl(sf, "Un niveau par ligne — tu peux taper ce que tu veux",
+                  size=8, color=C_GRAY).grid(row=r, column=0, columnspan=4, sticky="w", pady=(0, 6)); r += 1
+
+        self.niveaux_text = tk.Text(sf, height=6, width=28,
+                                     font=("Segoe UI", 9),
+                                     bg=C_WHITE, fg=C_BROWN,
+                                     relief="solid", bd=1, padx=6, pady=4)
+        self.niveaux_text.grid(row=r, column=0, columnspan=4, sticky="w", pady=(0, 8)); r += 1
+        self.niveaux_text.insert("1.0", "\n".join(self.cfg.get("niveaux", NIVEAUX)))
+
+        self._lbl(sf, "Niveau par défaut pour chaque café",
+                  bold=True, size=9).grid(row=r, column=0, columnspan=4, sticky="w", pady=(4, 4)); r += 1
+
+        self.niveau_def_vars = {}
+        nd_cfg = self.cfg.get("niveaux_defaut", NIVEAUX_DEFAUT)
+        niveaux_list = self.cfg.get("niveaux", NIVEAUX)
+        for cafe in CAFES:
+            tk.Label(sf, text=cafe, font=("Segoe UI", 9), bg=C_CREAM, fg=C_BROWN,
+                     anchor="w", width=22).grid(row=r, column=0, sticky="w", pady=2)
+            var = tk.StringVar(value=nd_cfg.get(cafe, ""))
+            self.niveau_def_vars[cafe] = var
+            ttk.Combobox(sf, textvariable=var, values=niveaux_list,
+                         width=20, font=("Segoe UI", 9)).grid(row=r, column=1, columnspan=2, sticky="w", padx=4)
+            r += 1
+
+        ttk.Separator(sf, orient="horizontal").grid(row=r, column=0, columnspan=4, sticky="ew", pady=(8, 8)); r += 1
+
         # ── Sélecteur de café pour les positions ──
         self._lbl(sf, "📍  Positions des champs", bold=True, size=11).grid(row=r, column=0, columnspan=4, sticky="w"); r += 1
         self._lbl(sf, "Coordonnées en points PDF  |  ↑ Y = monte  |  0,0 = bas-gauche",
@@ -961,11 +999,19 @@ class EtiquetteApp(tk.Tk):
                                            canvas.unbind_all("<Button-4>"),
                                            canvas.unbind_all("<Button-5>")))
 
+    def _default_niveau(self, cafe):
+        nd = self.cfg.get("niveaux_defaut", NIVEAUX_DEFAUT)
+        niveaux = self.cfg.get("niveaux", NIVEAUX)
+        if nd.get(cafe):
+            return nd[cafe]
+        return niveaux[2] if len(niveaux) >= 3 else (niveaux[0] if niveaux else "Brun")
+
     def _on_cafe_change(self, *_):
         self._update_tmpl_indicator()
         cafe = self.var_cafe.get()
-        if cafe in NIVEAUX_DEFAUT:
-            self.var_niveau.set(NIVEAUX_DEFAUT[cafe])
+        default = self._default_niveau(cafe)
+        if default:
+            self.var_niveau.set(default)
 
     def _update_tmpl_indicator(self):
         cafe = self.var_cafe.get()
@@ -1098,6 +1144,23 @@ class EtiquetteApp(tk.Tk):
     def _save_cfg(self):
         self.cfg["output_dir"] = self.var_outdir.get()
         self.cfg["queue_dir"]  = self.var_queuedir.get()
+
+        # Niveaux de torréfaction
+        raw = self.niveaux_text.get("1.0", "end")
+        niveaux_list = [n.strip() for n in raw.splitlines() if n.strip()]
+        if niveaux_list:
+            self.cfg["niveaux"] = niveaux_list
+        self.cfg["niveaux_defaut"] = {
+            cafe: var.get().strip()
+            for cafe, var in self.niveau_def_vars.items()
+            if var.get().strip()
+        }
+        # Rafraîchit le combobox de l'onglet Générer
+        try:
+            self.niveau_cb["values"] = self.cfg.get("niveaux", NIVEAUX)
+        except Exception:
+            pass
+
         self.cfg.setdefault("templates", {})
         for cafe, var in self.tmpl_vars.items():
             self.cfg["templates"][cafe] = var.get()
@@ -1298,7 +1361,7 @@ class EtiquetteApp(tk.Tk):
         errors, log_entries = [], []
         self.batch_progress["maximum"] = len(jobs)
         for i, (cafe, fmt, copies) in enumerate(jobs):
-            niveau = NIVEAUX_DEFAUT.get(cafe, NIVEAUX[2])
+            niveau = self._default_niveau(cafe)
             self.batch_status.set(f"📡  {i+1}/{len(jobs)} — {cafe} {fmt}…")
             self.batch_progress["value"] = i
             self.update()
@@ -1371,7 +1434,7 @@ class EtiquetteApp(tk.Tk):
         self.batch_progress["value"] = 0
 
         for i, (cafe, fmt, copies) in enumerate(jobs):
-            niveau = NIVEAUX_DEFAUT.get(cafe, NIVEAUX[2])
+            niveau = self._default_niveau(cafe)
             self.batch_status.set(f"⏳  {i+1}/{total} — {cafe} {fmt}…")
             self.batch_progress["value"] = i
             self.update()
